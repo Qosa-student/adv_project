@@ -52,20 +52,15 @@ export default async function handler(req, res) {
 						const genPassword = `pw_${Math.random().toString(36).slice(2,10)}_${Date.now()}`;
 
 
-						// role handling - try to get role id for 'user'
-						let roleId = null;
-						try {
-							const [rrows] = await db.query('SELECT id FROM roles WHERE name = ? LIMIT 1', ['user']);
-							if (rrows && rrows.length) roleId = rrows[0].id;
-						} catch (er) { /* ignore if roles table missing */ }
 
 						// hash a generated password and store in `password` column
 						const hash = await bcrypt.hash(genPassword, 10);
 						const storeValue = hash;
 
 						const nameToUse = userName || (userEmail.split('@')?.[0] ?? 'guest');
-						const insertSql = `INSERT INTO users (name, email, password, role_id) VALUES (?, ?, ?, ?)`;
-						const params = [nameToUse, userEmail.toLowerCase(), storeValue, roleId];
+						// create user without role_id (roles table removed in the simplified schema)
+						const insertSql = `INSERT INTO users (name, email, password) VALUES (?, ?, ?)`;
+						const params = [nameToUse, userEmail.toLowerCase(), storeValue];
 						const [resInsert] = await db.query(insertSql, params);
 						if (resInsert && resInsert.insertId) userId = resInsert.insertId;
 					}

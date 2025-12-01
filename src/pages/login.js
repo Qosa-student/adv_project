@@ -13,6 +13,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
   const [modalType, setModalType] = useState(null); // 'success' | 'error'
+  const [modalErrorCode, setModalErrorCode] = useState(null); // numeric HTTP status for error handling
 
   useEffect(() => {
     if (localStorage.getItem("hotel_auth") === "true") {
@@ -83,10 +84,15 @@ export default function Login() {
             router.push('/dashboard');
           }, 1200);
         } else {
-          showToast('Incorrect password. Please try again.', 'error');
+            setModalType('error');
+            setModalErrorCode(401);
+            setModalMessage('Incorrect password. Please try again.');
         }
       } else {
-        showToast(data.error || 'No account found with this email. Please register.', 'error');
+        // No local user found — show error modal with server message (if any)
+        setModalType('error');
+        setModalErrorCode(res.status || 404);
+        setModalMessage(data.error || 'No account found with this email. Please register.');
       }
     }
     setIsLoading(false);
@@ -213,27 +219,54 @@ export default function Login() {
               <p className="modal-body">{modalMessage}</p>
 
               {modalType === 'error' && (
-                <div className="modal-actions">
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    onClick={() => {
-                      setModalMessage(null);
-                      router.push("/register");
-                    }}
-                  >
-                    Create Account
-                  </button>
+                      <div className="modal-actions">
+                        {modalErrorCode === 404 ? (
+                          // If user not found, suggest creating an account
+                          <>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => {
+                                setModalMessage(null);
+                                router.push("/register");
+                              }}
+                            >
+                              Create Account
+                            </button>
 
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => setModalMessage(null)}
-                  >
-                    Close
-                  </button>
-                </div>
-              )}
+                            <button
+                              type="button"
+                              className="btn btn-ghost"
+                              onClick={() => setModalMessage(null)}
+                            >
+                              Close
+                            </button>
+                          </>
+                        ) : (
+                          // For incorrect password or other auth errors, allow retry and optionally a register link
+                          <>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={() => setModalMessage(null)}
+                            >
+                              Try Again
+                            </button>
+
+                            <button
+                              type="button"
+                              className="btn btn-ghost"
+                              onClick={() => {
+                                setModalMessage(null);
+                                router.push('/register');
+                              }}
+                            >
+                              Create Account
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    )}
             </div>
           </div>
         )}

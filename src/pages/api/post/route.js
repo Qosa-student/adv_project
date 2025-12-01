@@ -6,7 +6,8 @@ export default async function handler(req, res) {
       // Support two modes on same endpoint to avoid adding new files:
       // - /api/post => posts (existing behavior)
       // - /api/post?type=hotels => return hotels from DB mapped for front-end
-      const type = req.query?.type || '';
+      const type = req.query?.type || 'hotels';
+      // Default to returning hotels when ?type is omitted
       if (type === 'hotels') {
         const [hotels] = await db.query(
           'SELECT id, name, location, price_per_night AS price, stars, image_url AS image, created_at FROM hotels ORDER BY id'
@@ -32,8 +33,8 @@ export default async function handler(req, res) {
         return res.status(200).json({ bookings });
       }
 
-      const [posts] = await db.query('SELECT * FROM posts');
-      return res.status(200).json({ posts });
+      // If type isn't recognized, return an empty payload to avoid relying on a posts table
+      return res.status(200).json({});
     }
 
     // allow POST/DELETE for some types (bookings) via this endpoint so we don't add new files

@@ -706,6 +706,24 @@
   flex-direction: column;
 }
 
+/* Booking modal price rows: ensure text is dark and easy to read */
+.priceBreakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  color: #111827; /* near-black for clarity */
+  font-weight: 600;
+}
+
+.priceRow span {
+  color: #111827; /* ensure spans inside are also dark */
+}
+
 .price {
   font-size: 1.5rem;
   font-weight: 700;
@@ -806,6 +824,23 @@
 .bookingDate {
   color: #64748b;
   font-size: 0.9rem;
+}
+
+/* Ensure booking date range text uses dark (black) color so it's readable */
+.dateRangeText {
+  color: #111827; /* tailwind gray-900 / near-black */
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.nightsBadge {
+  margin-left: 8px;
+  background: #eef2ff; /* subtle background */
+  color: #111827;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .bookingUsage {

@@ -655,7 +655,7 @@ export default function Dashboard() {
     })();
 
     setModalHotel(null);
-    showToast(`Successfully booked ${hotel.name} for ${nights} nights! 🎉`, "success");
+    showToast(`Successfully booked ${hotel.name} for ${nights} ${nights === 1 ? 'night' : 'nights'}! 🎉`, "success");
   };
 
   const cancelBooking = (id) => {
@@ -1042,8 +1042,7 @@ export default function Dashboard() {
                       </div>
                       <div className={styles.bookingDates}>
                         <div className={styles.dateRange}>
-                          <span>📅 {formatDate(booking.checkIn)} - {formatDate(booking.checkOut)}</span>
-                          <span className={styles.nightsBadge}>{booking.nights} nights</span>
+                          <span className={styles.dateRangeText}>📅 {formatDate(booking.checkIn)} - {formatDate(booking.checkOut)} {booking.nights} {booking.nights === 1 ? 'night' : 'nights'}</span>
                         </div>
                       </div>
                       <div className={styles.bookingDetails}>
