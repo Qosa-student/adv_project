@@ -20,10 +20,17 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [modalMessage, setModalMessage] = useState(null);
   const [modalType, setModalType] = useState(null); // 'success' | 'error'
-
   useEffect(() => {
-    if (localStorage.getItem("hotel_auth") === "true") {
+    // Only redirect if user is actually signed in and user object exists
+    const auth = localStorage.getItem("hotel_auth") === "true";
+    const storedUser = localStorage.getItem("hotel_user");
+    if (auth && storedUser) {
       router.replace("/dashboard");
+    }
+
+    if (auth && !storedUser) {
+      // stale auth flag -> clear it so user may register/login again
+      localStorage.removeItem('hotel_auth');
     }
   }, [router]);
 
@@ -85,18 +92,6 @@ export default function Register() {
 
     setErrors(err);
     return Object.keys(err).length === 0;
-  };
-
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: "" }));
-    }
-
-    if (field === "password") {
-      calculateStrength(value);
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -190,11 +185,25 @@ export default function Register() {
     }
   };
 
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: "" }));
+    }
+
+    if (field === "password") {
+      calculateStrength(value);
+    }
+  };
+
+  
+
   return (
     <>
       <Head>
-        <title>Register — White Flower</title>
-        <meta name="description" content="Create your White Flower account" />
+        <title>Register — White Flower Stays</title>
+        <meta name="description" content="Create a White Flower Stays account" />
       </Head>
 
       <div className={styles.authContainer}>
@@ -202,26 +211,24 @@ export default function Register() {
         
         <div className={styles.authCard}>
           <div className={styles.authHeader}>
-            <h1>Create Account</h1>
-            <p>Join us and start booking hotels in Davao</p>
+            <h1>Create an account</h1>
+            <p>Register to manage your hotel bookings and submit reviews</p>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.authForm}>
             <div className={styles.formGroup}>
-              <label htmlFor="name">Full Name</label>
+              <label htmlFor="name">Your full name</label>
               <input
                 id="name"
                 type="text"
                 value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                placeholder="John Doe"
-                className={errors.name ? styles.inputError : ""}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                placeholder="Jane Doe"
+                className={errors.name ? styles.inputError : ''}
                 disabled={isLoading}
               />
               {errors.name && <span className={styles.errorText}>{errors.name}</span>}
-            </div>
 
-            <div className={styles.formGroup}>
               <label htmlFor="email">Email Address</label>
               <input
                 id="email"
@@ -243,7 +250,7 @@ export default function Register() {
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
-                  placeholder="Create a strong password"
+                  placeholder="Create a password (min 6 characters)"
                   className={errors.password ? styles.inputError : ""}
                   disabled={isLoading}
                 />
@@ -255,7 +262,8 @@ export default function Register() {
                   {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
-              
+              {errors.password && <span className={styles.errorText}>{errors.password}</span>}
+
               {formData.password && (
                 <div className={styles.passwordStrength}>
                   <div className={styles.strengthBar}>
@@ -272,7 +280,6 @@ export default function Register() {
                   </span>
                 </div>
               )}
-              {errors.password && <span className={styles.errorText}>{errors.password}</span>}
             </div>
 
             <div className={styles.formGroup}>
@@ -282,9 +289,9 @@ export default function Register() {
                   id="confirm"
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirm}
-                  onChange={(e) => handleInputChange("confirm", e.target.value)}
+                  onChange={(e) => handleInputChange('confirm', e.target.value)}
                   placeholder="Confirm your password"
-                  className={errors.confirm ? styles.inputError : ""}
+                  className={errors.confirm ? styles.inputError : ''}
                   disabled={isLoading}
                 />
                 <button
@@ -307,7 +314,7 @@ export default function Register() {
                 {isLoading ? (
                   <>
                     <div className={styles.spinner}></div>
-                    Creating Account...
+                    Registering...
                   </>
                 ) : (
                   "Register"
@@ -320,13 +327,13 @@ export default function Register() {
                 className={styles.secondaryButton}
                 disabled={isLoading}
               >
-                Already have an account?
+                Already have an account? Login
               </button>
             </div>
 
             <div className={styles.authFooter}>
               <p>
-                Already have an account?{" "}
+                Already created an account? {" "}
                 <button 
                   type="button" 
                   onClick={() => router.push("/login")}

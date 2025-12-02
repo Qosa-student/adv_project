@@ -54,192 +54,11 @@ const SAMPLE_HOTELS = [
   { id: 46, name: "The Pinnacle Hotel and Suites", location: "Davao City", price: 3107, stars: 4.1, amenities: ["Pool", "Gym", "Restaurant"] }
 ];
 
-const SAMPLE_REVIEWS = {
-  1: [
-    { id: 1, user: "Maria Santos", rating: 4, comment: "Great location and comfortable beds. Staff was very helpful!", date: "2024-01-15" },
-    { id: 2, user: "John Cruz", rating: 5, comment: "Excellent service and clean rooms. Will definitely stay again!", date: "2024-02-20" }
-  ],
-  2: [
-    { id: 1, user: "Sarah Lim", rating: 5, comment: "Luxurious experience! The pool and spa were amazing.", date: "2024-01-10" },
-    { id: 2, user: "Michael Tan", rating: 4, comment: "Beautiful hotel with great amenities. Highly recommended!", date: "2024-02-15" }
-  ],
-  3: [
-    { id: 1, user: "Robert Garcia", rating: 4, comment: "Perfect for long stays with kitchen facilities.", date: "2024-01-20" },
-    { id: 2, user: "Lisa Chen", rating: 3, comment: "Good value for money. Clean and functional.", date: "2024-02-25" }
-  ],
-  4: [
-    { id: 1, user: "David Wong", rating: 3, comment: "Basic but clean. Good for budget travelers.", date: "2024-01-18" },
-    { id: 2, user: "Anna Reyes", rating: 4, comment: "Surprisingly good for the price. Would stay again.", date: "2024-02-22" }
-  ],
-  5: [
-    { id: 1, user: "James Lee", rating: 4, comment: "Great amenities and spacious rooms. Pool was nice.", date: "2024-01-12" },
-    { id: 2, user: "Michelle Ong", rating: 3, comment: "Good location but rooms could be cleaner.", date: "2024-02-18" }
-  ],
-  6: [
-    { id: 1, user: "Carlos Rivera", rating: 3, comment: "Comfortable stay with good AC. Basic but decent.", date: "2024-01-25" },
-    { id: 2, user: "Elena Torres", rating: 4, comment: "Good value for money in a convenient location.", date: "2024-02-28" }
-  ],
-  7: [
-    { id: 1, user: "Daniel Lim", rating: 3, comment: "Nice garden area. Rooms are basic but clean.", date: "2024-01-14" },
-    { id: 2, user: "Grace Tan", rating: 2, comment: "Needs improvement in room maintenance.", date: "2024-02-16" }
-  ],
-  8: [
-    { id: 1, user: "Paul Santos", rating: 4, comment: "Good restaurant and comfortable rooms.", date: "2024-01-22" },
-    { id: 2, user: "Sofia Cruz", rating: 4, comment: "Friendly staff and clean facilities.", date: "2024-02-24" }
-  ],
-  9: [
-    { id: 1, user: "Mark Chen", rating: 3, comment: "Basic accommodation with parking. Good for short stays.", date: "2024-01-16" },
-    { id: 2, user: "Tina Wong", rating: 4, comment: "Surprisingly good for the low price.", date: "2024-02-19" }
-  ],
-  10: [
-    { id: 1, user: "Kevin Lim", rating: 5, comment: "Excellent breakfast and comfortable beds!", date: "2024-01-11" },
-    { id: 2, user: "Rachel Tan", rating: 4, comment: "Great value with included breakfast.", date: "2024-02-21" }
-  ],
-  11: [
-    { id: 1, user: "Anthony Reyes", rating: 4, comment: "Beautiful garden setting. Peaceful stay.", date: "2024-01-19" },
-    { id: 2, user: "Megan Ong", rating: 3, comment: "Nice atmosphere but rooms need updating.", date: "2024-02-26" }
-  ],
-  12: [
-    { id: 1, user: "Brian Garcia", rating: 4, comment: "Great facilities including pool and gym.", date: "2024-01-13" },
-    { id: 2, user: "Nicole Lee", rating: 3, comment: "Good amenities but could be cleaner.", date: "2024-02-17" }
-  ],
-  13: [
-    { id: 1, user: "Steven Wong", rating: 3, comment: "Convenient location near Robinsons.", date: "2024-01-24" },
-    { id: 2, user: "Catherine Tan", rating: 4, comment: "Good budget option with reliable AC.", date: "2024-02-27" }
-  ],
-  14: [
-    { id: 1, user: "Eric Santos", rating: 4, comment: "Central location with good restaurant.", date: "2024-01-17" },
-    { id: 2, user: "Patricia Cruz", rating: 4, comment: "Comfortable stay in the city center.", date: "2024-02-23" }
-  ],
-  15: [
-    { id: 1, user: "Jason Lim", rating: 3, comment: "Very affordable with basic amenities.", date: "2024-01-21" },
-    { id: 2, user: "Diana Chen", rating: 2, comment: "Basic accommodation, gets the job done.", date: "2024-02-14" }
-  ],
-  16: [
-    { id: 1, user: "Ryan Tan", rating: 4, comment: "Good location near G Mall. Clean rooms.", date: "2024-01-26" },
-    { id: 2, user: "Jessica Wong", rating: 3, comment: "Decent budget hotel with good AC.", date: "2024-02-29" }
-  ],
-  17: [
-    { id: 1, user: "Andrew Lee", rating: 5, comment: "Excellent 24-hour service! Very convenient.", date: "2024-01-09" },
-    { id: 2, user: "Vanessa Ong", rating: 4, comment: "Great for late check-ins. Reliable service.", date: "2024-02-13" }
-  ],
-  18: [
-    { id: 1, user: "Christopher Reyes", rating: 4, comment: "Good parking facilities and clean rooms.", date: "2024-01-23" },
-    { id: 2, user: "Angela Santos", rating: 4, comment: "Convenient location with adequate parking.", date: "2024-02-30" }
-  ],
-  19: [
-    { id: 1, user: "Justin Cruz", rating: 2, comment: "Basic accommodation, needs improvement.", date: "2024-01-28" },
-    { id: 2, user: "Marianne Tan", rating: 2, comment: "Very basic but functional for short stays.", date: "2024-02-12" }
-  ],
-  20: [
-    { id: 1, user: "William Lim", rating: 5, comment: "Luxury experience! Exceptional service and amenities.", date: "2024-01-08" },
-    { id: 2, user: "Sophia Chen", rating: 5, comment: "Worth every peso! Amazing spa and pool.", date: "2024-02-11" }
-  ],
-  21: [
-    { id: 1, user: "Richard Wong", rating: 4, comment: "Royal treatment! Beautiful pool area.", date: "2024-01-27" },
-    { id: 2, user: "Isabella Lee", rating: 5, comment: "Excellent service and comfortable rooms.", date: "2024-02-10" }
-  ],
-  22: [
-    { id: 1, user: "Edward Tan", rating: 4, comment: "Charming hotel with beautiful garden.", date: "2024-01-29" },
-    { id: 2, user: "Gabriella Santos", rating: 4, comment: "Lovely atmosphere and good restaurant.", date: "2024-02-09" }
-  ],
-  23: [
-    { id: 1, user: "Thomas Cruz", rating: 4, comment: "Convenient near SM Lanang. Clean and comfortable.", date: "2024-01-30" },
-    { id: 2, user: "Amelia Reyes", rating: 3, comment: "Good location, basic but adequate rooms.", date: "2024-02-08" }
-  ],
-  24: [
-    { id: 1, user: "Henry Lim", rating: 5, comment: "Great with kitchen facilities! Perfect for families.", date: "2024-01-31" },
-    { id: 2, user: "Chloe Chen", rating: 4, comment: "Convenient with kitchenette. Good for longer stays.", date: "2024-02-07" }
-  ],
-  25: [
-    { id: 1, user: "George Wong", rating: 4, comment: "Clean and functional with laundry facilities.", date: "2024-02-01" },
-    { id: 2, user: "Zoe Tan", rating: 4, comment: "Good for extended stays with laundry service.", date: "2024-02-06" }
-  ],
-  26: [
-    { id: 1, user: "Samuel Lee", rating: 5, comment: "Excellent pool and restaurant quality!", date: "2024-02-02" },
-    { id: 2, user: "Lily Ong", rating: 4, comment: "Great amenities and comfortable stay.", date: "2024-02-05" }
-  ],
-  27: [
-    { id: 1, user: "Peter Santos", rating: 4, comment: "Good kitchen facilities for self-catering.", date: "2024-02-03" },
-    { id: 2, user: "Hannah Cruz", rating: 3, comment: "Basic but functional with kitchen access.", date: "2024-02-04" }
-  ],
-  28: [
-    { id: 1, user: "Victor Lim", rating: 5, comment: "Modern and clean with excellent AC.", date: "2024-01-07" },
-    { id: 2, user: "Ella Tan", rating: 4, comment: "Comfortable rooms and good location.", date: "2024-01-06" }
-  ],
-  29: [
-    { id: 1, user: "Leo Chen", rating: 4, comment: "Good restaurant and comfortable accommodations.", date: "2024-01-05" },
-    { id: 2, user: "Nora Wong", rating: 3, comment: "Decent hotel with adequate facilities.", date: "2024-01-04" }
-  ],
-  30: [
-    { id: 1, user: "Oscar Reyes", rating: 4, comment: "Convenient parking and reliable WiFi.", date: "2024-01-03" },
-    { id: 2, user: "Ivy Santos", rating: 5, comment: "Excellent value with good parking space.", date: "2024-01-02" }
-  ],
-  31: [
-    { id: 1, user: "Nathan Lee", rating: 5, comment: "Outstanding facilities! Pool and gym are top-notch.", date: "2024-01-01" },
-    { id: 2, user: "Ava Tan", rating: 5, comment: "Luxurious experience without breaking the bank.", date: "2023-12-31" }
-  ],
-  32: [
-    { id: 1, user: "Derek Wong", rating: 4, comment: "Good restaurant and comfortable rooms.", date: "2023-12-30" },
-    { id: 2, user: "Mia Chen", rating: 3, comment: "Decent hotel with adequate dining options.", date: "2023-12-29" }
-  ],
-  33: [
-    { id: 1, user: "Ethan Lim", rating: 4, comment: "Reliable AC and comfortable stay.", date: "2023-12-28" },
-    { id: 2, user: "Ruby Santos", rating: 4, comment: "Good value with modern amenities.", date: "2023-12-27" }
-  ],
-  34: [
-    { id: 1, user: "Aaron Cruz", rating: 5, comment: "Excellent for business travelers with good facilities.", date: "2023-12-26" },
-    { id: 2, user: "Emma Reyes", rating: 4, comment: "Comfortable with good business center.", date: "2023-12-25" }
-  ],
-  35: [
-    { id: 1, user: "Jacob Tan", rating: 5, comment: "Surprisingly excellent for a budget hotel!", date: "2023-12-24" },
-    { id: 2, user: "Scarlett Lee", rating: 4, comment: "Great value with good AC and WiFi.", date: "2023-12-23" }
-  ],
-  36: [
-    { id: 1, user: "Lucas Wong", rating: 4, comment: "Good common areas and social spaces.", date: "2023-12-22" },
-    { id: 2, user: "Aria Chen", rating: 5, comment: "Excellent for group stays with common facilities.", date: "2023-12-21" }
-  ],
-  37: [
-    { id: 1, user: "Isaiah Santos", rating: 4, comment: "Good for meetings and business events.", date: "2023-12-20" },
-    { id: 2, user: "Penelope Lim", rating: 4, comment: "Adequate facilities for business purposes.", date: "2023-12-19" }
-  ],
-  38: [
-    { id: 1, user: "Julian Cruz", rating: 4, comment: "Nice pool and good restaurant quality.", date: "2023-12-18" },
-    { id: 2, user: "Eleanor Tan", rating: 5, comment: "Excellent amenities and comfortable stay.", date: "2023-12-17" }
-  ],
-  39: [
-    { id: 1, user: "Jonathan Reyes", rating: 5, comment: "Great common areas and social environment.", date: "2023-12-16" },
-    { id: 2, user: "Clara Wong", rating: 4, comment: "Good for social stays with common facilities.", date: "2023-12-15" }
-  ],
-  40: [
-    { id: 1, user: "Adrian Lee", rating: 3, comment: "Basic but functional with parking.", date: "2023-12-14" },
-    { id: 2, user: "Violet Chen", rating: 3, comment: "Adequate for short budget stays.", date: "2023-12-13" }
-  ],
-  41: [
-    { id: 1, user: "Charles Santos", rating: 5, comment: "Excellent facilities including pool and gym!", date: "2023-12-12" },
-    { id: 2, user: "Stella Lim", rating: 5, comment: "Luxurious amenities at reasonable prices.", date: "2023-12-11" }
-  ],
-  42: [
-    { id: 1, user: "Maxwell Cruz", rating: 4, comment: "Good location on Roxas Street. Clean rooms.", date: "2023-12-10" },
-    { id: 2, user: "Natalie Tan", rating: 3, comment: "Decent accommodation in central location.", date: "2023-12-09" }
-  ],
-  43: [
-    { id: 1, user: "Theodore Wong", rating: 4, comment: "Beautiful boutique hotel with good spa.", date: "2023-12-08" },
-    { id: 2, user: "Luna Lee", rating: 5, comment: "Charming hotel with excellent service.", date: "2023-12-07" }
-  ],
-  44: [
-    { id: 1, user: "Arthur Chen", rating: 4, comment: "Good restaurant and comfortable stay.", date: "2023-12-06" },
-    { id: 2, user: "Samantha Santos", rating: 3, comment: "Adequate hotel with dining options.", date: "2023-12-05" }
-  ],
-  45: [
-    { id: 1, user: "Sebastian Lim", rating: 5, comment: "Luxury experience with amazing spa!", date: "2023-12-04" },
-    { id: 2, user: "Aurora Cruz", rating: 5, comment: "Exceptional service and beautiful pool.", date: "2023-12-03" }
-  ],
-  46: [
-    { id: 1, user: "Benjamin Tan", rating: 4, comment: "Great facilities including pool and gym.", date: "2023-12-02" },
-    { id: 2, user: "Genesis Wong", rating: 5, comment: "Excellent hotel with top-notch amenities.", date: "2023-12-01" }
-  ]
-};
+
+// NOTE: Reviews are persisted on the server in MySQL via the /api/reviews endpoint.
+// The large in-file SAMPLE_REVIEWS was removed so the UI always fetches the
+// canonical reviews for a hotel. During development, the app will gracefully
+// show "No reviews yet" when no server records exist.
 
 const HOTEL_IMAGES = [
   "/hotel1.jpg", "/hotel2.jpg", "/hotel3.jpg", "/hotel4.jpg", "/hotel5.jpg",
@@ -272,6 +91,8 @@ export default function Dashboard() {
   const [selectedHotelReviews, setSelectedHotelReviews] = useState([]);
   const [selectedReviewHotelId, setSelectedReviewHotelId] = useState(null);
   const [toast, setToast] = useState(null);
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false);
+  const [authPromptMsg, setAuthPromptMsg] = useState('You need to sign in or create an account to submit a review.');
   const [profilePic, setProfilePic] = useState("/default-avatar.jpg");
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("name");
@@ -279,6 +100,8 @@ export default function Dashboard() {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [loadingReviews, setLoadingReviews] = useState(false);
   const fileInputRef = useRef(null);
   const checkInRef = useRef(null);
   const checkOutRef = useRef(null);
@@ -679,14 +502,50 @@ export default function Dashboard() {
     showToast("Booking cancelled successfully", "success");
   };
 
-  const viewReviews = (hotelId) => {
-    const hotelReviews = SAMPLE_REVIEWS[hotelId] || [];
+  const viewReviews = async (hotelId) => {
     setSelectedReviewHotelId(hotelId);
-    setSelectedHotelReviews(hotelReviews);
+    setSelectedHotelReviews([]);
     setShowReviews(true);
+
+    try {
+      // only mark as loading reviews — don't touch submittingReview here (that
+      // flag indicates a user submitting a new review, not loading the list)
+      setLoadingReviews(true);
+      const res = await fetch(`/api/reviews?hotelId=${hotelId}`);
+      if (!res) throw new Error('No response from server');
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        showToast(body?.error || 'Failed to load reviews', 'error');
+        return;
+      }
+
+      const json = await res.json().catch(() => ({}));
+      const rows = Array.isArray(json.reviews) ? json.reviews : [];
+      // map server rows to UI-friendly shape
+      const mapped = rows.map(r => ({
+        id: r.id,
+        user: r.user_name || r.user || r.user_email || 'Guest',
+        rating: Number(r.rating) || 0,
+        comment: r.comment || '',
+        date: r.review_date || r.created_at || ''
+      }));
+
+      setSelectedHotelReviews(mapped);
+    } catch (err) {
+      console.warn('Failed to fetch reviews', err);
+      showToast('Unable to load reviews (server error)', 'error');
+    } finally {
+      setLoadingReviews(false);
+    }
   };
 
-  const submitReview = () => {
+  const submitReview = async () => {
+    // require a signed-in user here — if not signed in, show a helpful popup
+    if (!user) {
+      setAuthPromptMsg('You must be signed in to write a review.');
+      setShowAuthPrompt(true);
+      return;
+    }
     if (!newReview.comment.trim()) {
       showToast("Please write a review comment", "error");
       return;
@@ -696,24 +555,79 @@ export default function Dashboard() {
       return;
     }
 
-    const review = {
-      id: Date.now(),
-      user: user.name,
-      rating: newReview.rating,
-      comment: newReview.comment,
-      date: new Date().toISOString().split('T')[0]
+    const payload = {
+      hotelId: Number(selectedReviewHotelId),
+      rating: Number(newReview.rating),
+      comment: newReview.comment.trim()
     };
+    // pass along user identifying info — server will verify and create as needed
+    if (user) {
+      if (user.id) payload.userId = Number(user.id);
+      if (user.email) payload.userEmail = user.email;
+      if (user.name) payload.userName = user.name;
+    }
 
-    // Update in-memory SAMPLE_REVIEWS so it's visible during this session
-    const existing = SAMPLE_REVIEWS[selectedReviewHotelId] || [];
-    const updated = [review, ...existing];
-    SAMPLE_REVIEWS[selectedReviewHotelId] = updated;
-    setSelectedHotelReviews(updated);
+    // mark that we are submitting a review so the UI shows the loading state
+    setSubmittingReview(true);
+    try {
+      const res = await fetch('/api/reviews', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res) throw new Error('No response from server');
 
-    showToast("Review submitted successfully!", "success");
-    setNewReview({ rating: 5, comment: "" });
-    setShowReviews(false);
-    setSelectedReviewHotelId(null);
+      if (res.status === 409) {
+        const body = await res.json().catch(() => ({}));
+        showToast(body?.error || 'Duplicate review detected', 'error');
+        return;
+      }
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        const msg = body?.error || body?.detail || 'Failed to submit review';
+        // If server complains that a user id/email is required, show auth prompt
+        const lowered = String(msg || '').toLowerCase();
+        if (lowered.includes('userid') || lowered.includes('user id') || lowered.includes('useremail') || lowered.includes('user email') || lowered.includes('user') && lowered.includes('required')) {
+          setAuthPromptMsg(body?.detail || body?.error || 'You need an account to post reviews');
+          setShowAuthPrompt(true);
+          return;
+        }
+        // If DB table missing give a helpful hint
+        if ((body?.detail || '').toLowerCase().includes('reviews table') || (body?.detail || '').toLowerCase().includes('no such table')) {
+          showToast('Server database looks incomplete. Import the SQL schema (sql/adv_project_schema.sql) and restart the app.', 'error');
+        } else {
+          showToast(msg, 'error');
+        }
+        return;
+      }
+
+      const body = await res.json().catch(() => ({}));
+      // server returns a review object under `review` when created
+      const r = body?.review;
+      if (r) {
+        const mapped = {
+          id: r.id,
+          user: r.user_name || user?.name || r.user_email || 'Guest',
+          rating: Number(r.rating) || Number(newReview.rating),
+          comment: r.comment || newReview.comment,
+          date: r.review_date || r.created_at || new Date().toISOString().split('T')[0]
+        };
+
+        // show the just-submitted review at the top and then refresh canonical list
+        setSelectedHotelReviews(prev => [mapped, ...(prev || [])]);
+        setNewReview({ rating: 5, comment: '' });
+        showToast('Review submitted successfully!', 'success');
+
+        // re-fetch canonical list in background to ensure consistency
+        try { await viewReviews(selectedReviewHotelId); } catch(_) {}
+      } else {
+        showToast('Review saved', 'success');
+        setNewReview({ rating: 5, comment: '' });
+        try { await viewReviews(selectedReviewHotelId); } catch(_) {}
+      }
+    } catch (err) {
+      console.error('Failed to submit review', err);
+      showToast('Unable to send review (network error)', 'error');
+    } finally {
+      setSubmittingReview(false);
+    }
   };
 
   const closeReviews = () => {
@@ -1022,46 +936,50 @@ export default function Dashboard() {
                 <p>Start exploring our hotels and book your first stay!</p>
               </div>
             ) : (
-              <div className={styles.bookingGrid}>
+              <div className={styles.hotelGrid}>
                 {bookings.map((booking) => (
-                  <div key={booking.id} className={styles.bookingCard}>
-                    <Image
-                      src={booking.image}
-                      width={120}
-                      height={120}
-                      alt={booking.hotel}
-                      className={styles.bookingImage}
-                    />
-                    <div className={styles.bookingInfo}>
-                      <h3>{booking.hotel}</h3>
-                      <div className={styles.bookingMeta}>
-                        <span className={styles.bookingStars}>
-                          {getStars(booking.stars)}
-                        </span>
-                        <span className={styles.bookingLocation}>{booking.location}</span>
-                      </div>
-                      <div className={styles.bookingDates}>
-                        <div className={styles.dateRange}>
-                          <span className={styles.dateRangeText}>📅 {formatDate(booking.checkIn)} - {formatDate(booking.checkOut)} {booking.nights} {booking.nights === 1 ? 'night' : 'nights'}</span>
-                        </div>
-                      </div>
-                      <div className={styles.bookingDetails}>
-                        <div className={styles.bookingPrice}>
-                          <div>₱{booking.price}/night</div>
-                          <div className={styles.totalPrice}>₱{booking.totalPrice} total</div>
-                        </div>
-                        <div className={styles.bookingDate}>Booked: {booking.date}</div>
-                      </div>
-                      <div className={styles.bookingStatus}>
-                        <span className={styles.statusConfirmed}>Confirmed</span>
+                  <div key={booking.id} className={styles.hotelCard}>
+                    <div className={styles.hotelImageContainer}>
+                      <Image
+                        src={booking.image}
+                        width={400}
+                        height={240}
+                        alt={booking.hotel}
+                        className={styles.hotelImage}
+                      />
+                      <div className={styles.hotelOverlay}>
+                        <span className={styles.hotelRating}>{(booking.stars || 0).toFixed(1)} ★</span>
                       </div>
                     </div>
-                    <button 
-                      className={styles.cancelButton}
-                      onClick={() => cancelBooking(booking.id)}
-                    >
-                      Cancel
-                    </button>
+
+                    <div className={styles.hotelInfo}>
+                      <h3>{booking.hotel}</h3>
+                      <p className={styles.hotelLocation}>📍 {booking.location}</p>
+
+                      <div className={styles.hotelAmenities}>
+                        {/* show a small booking meta (dates, nights) inside amenities area */}
+                        <span className={styles.amenityTag}>📅 {formatDate(booking.checkIn)} - {formatDate(booking.checkOut)}</span>
+                        <span className={styles.amenityTag}>{booking.nights} {booking.nights === 1 ? 'night' : 'nights'}</span>
+                      </div>
+
+                      <div className={styles.hotelFooter}>
+                        <div className={styles.priceSection}>
+                          <div className={styles.price}>₱{booking.price}</div>
+                          <span className={styles.priceLabel}>/night</span>
+                        </div>
+                        <button 
+                          className={styles.cancelButton}
+                          onClick={() => cancelBooking(booking.id)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+
+                      <div style={{marginTop:8, fontSize:13,color:'#5b6770'}}>
+                        <div>Booked: {booking.date}</div>
+                        <div style={{marginTop:6}} className={styles.statusConfirmed}>Confirmed</div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1271,9 +1189,11 @@ export default function Dashboard() {
             </div>
 
             <div className={styles.reviewsContent}>
-              <div className={styles.reviewsList}>
+              <div className={styles.reviewsList} style={{ maxHeight: 360, overflowY: 'auto', paddingRight: 8 }}>
                 <h3 style={{ color: '#000' }}>Customer Reviews</h3>
-                {selectedHotelReviews.length === 0 ? (
+                {loadingReviews ? (
+                  <p className={styles.noReviews}>Loading reviews…</p>
+                ) : selectedHotelReviews.length === 0 ? (
                   <p className={styles.noReviews}>No reviews yet. Be the first to review!</p>
                 ) : (
                   selectedHotelReviews.map(review => (
@@ -1310,14 +1230,31 @@ export default function Dashboard() {
                   className={styles.reviewTextarea}
                   rows="4"
                 />
-                <button 
+                <button
                   className={styles.submitReviewButton}
                   onClick={submitReview}
+                  disabled={submittingReview}
                 >
-                  Submit Review
+                  {submittingReview ? 'Submitting...' : 'Submit Review'}
                 </button>
               </div>
             </div>
+            {/* Auth / create account prompt */}
+            {showAuthPrompt && (
+              <div className={styles.modalOverlay} onClick={() => setShowAuthPrompt(false)}>
+                <div className={styles.authPromptModal} onClick={(e) => e.stopPropagation()} style={{ maxWidth: 520 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3 style={{ margin: 0 }}>Sign in required</h3>
+                    <button className={styles.closeButton} onClick={() => setShowAuthPrompt(false)}>✕</button>
+                  </div>
+                  <p style={{ marginTop: 12, color: '#222' }}>{authPromptMsg}</p>
+                  <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 14 }}>
+                    <button className={styles.cancelButton} onClick={() => setShowAuthPrompt(false)}>Try again</button>
+                    <button className={styles.confirmButton} onClick={() => { setShowAuthPrompt(false); router.push('/register'); }}>Create account</button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

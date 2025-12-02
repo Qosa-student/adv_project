@@ -16,8 +16,20 @@ export default function Login() {
   const [modalErrorCode, setModalErrorCode] = useState(null); // numeric HTTP status for error handling
 
   useEffect(() => {
-    if (localStorage.getItem("hotel_auth") === "true") {
+    // Only redirect to dashboard when we actually have a stored user object
+    // and the auth flag. If the auth flag is stale (true but no user present)
+    // clear it so the login page remains accessible for re-authentication.
+    const auth = localStorage.getItem("hotel_auth") === "true";
+    const storedUser = localStorage.getItem("hotel_user");
+    if (auth && storedUser) {
       router.replace("/dashboard");
+      return;
+    }
+
+    if (auth && !storedUser) {
+      // stale auth flag found — remove it so the user can log in again
+      console.warn('stale hotel_auth flag found; clearing so login/register remain reachable');
+      localStorage.removeItem('hotel_auth');
     }
   }, [router]);
 
@@ -110,7 +122,7 @@ export default function Login() {
     <>
       <Head>
         <title>Login — White Flower Stays</title>
-        <meta name="description" content="Login to your White Flower account" />
+        <meta name="description" content="Login to your White Flower Stays account" />
       </Head>
 
       <div className={styles.authContainer}>
