@@ -118,6 +118,14 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Failed to validate hotelId', detail: e?.message || String(e) });
       }
 
+      // NOTE: We intentionally do NOT block creation of multiple reviews by
+      // the same user. Historically there was an application-level check that
+      // returned 409 for any existing review and prevented users from leaving
+      // reviews on other hotels. To allow a user to review many hotels, and
+      // to keep the server logic simple, skip a pre-check here and let the
+      // INSERT happen. If the database enforces a uniqueness constraint that
+      // prevents the insert, we'll surface a clear error back to the client.
+
       // Try insert; if the DB enforces uniqueness (user+hotel) the insert will
       // fail with ER_DUP_ENTRY. We do NOT want to overwrite historical reviews
       // silently, so return 409 Conflict with a helpful message instead.
