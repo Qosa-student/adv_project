@@ -93,7 +93,9 @@ export default function Dashboard() {
   const [toast, setToast] = useState(null);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [authPromptMsg, setAuthPromptMsg] = useState('You need to sign in or create an account to submit a review.');
-  const [profilePic, setProfilePic] = useState("/default-avatar.jpg");
+  // default lives in public/default-avatar.avif — use a per-user key so
+  // multiple accounts can have independent profile pictures.
+  const [profilePic, setProfilePic] = useState("/default-avatar.avif");
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("name");
   const [priceRange, setPriceRange] = useState([0, 7000]);
@@ -102,6 +104,9 @@ export default function Dashboard() {
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [loadingReviews, setLoadingReviews] = useState(false);
+  // inline UI feedback for actions (e.g., a small 'Removed' bubble next to a button)
+  const [actionFlash, setActionFlash] = useState({});
+  const [cancellingIds, setCancellingIds] = useState([]);
   const fileInputRef = useRef(null);
   const checkInRef = useRef(null);
   const checkOutRef = useRef(null);
@@ -109,6 +114,8 @@ export default function Dashboard() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState({ text: '', type: '' }); // '' | 'success' | 'error'
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -124,8 +131,17 @@ export default function Dashboard() {
     const userObj = JSON.parse(storedUser);
     setUser(userObj);
 
-    const savedPic = localStorage.getItem("user_profile_pic");
-    if (savedPic) setProfilePic(savedPic);
+    // support per-user stored pictures and fall back to the old global key
+    const perUserKey = `user_profile_pic_${userObj.email}`;
+    const savedPic = localStorage.getItem(perUserKey) || localStorage.getItem("user_profile_pic");
+
+    if (savedPic) {
+      setProfilePic(savedPic);
+    } else {
+      // ensure new accounts have a default profile saved for this user
+      try { localStorage.setItem(perUserKey, '/default-avatar.avif'); } catch (e) {}
+      setProfilePic('/default-avatar.avif');
+    }
 
     const allBookings = JSON.parse(localStorage.getItem("hotel_bookings") || "[]");
     const userBookings = allBookings.filter(b => b.userEmail === userObj.email);
@@ -271,10 +287,15 @@ export default function Dashboard() {
     let updatedFavorites;
     if (wasFavorited) {
       updatedFavorites = favorites.filter(id => id !== hotelId);
-      showToast("Removed from favorites", "success");
+      // toast removed by request (keep inline actionFlash)
+      // inline small bubble
+      setActionFlash(prev => ({ ...prev, [`fav-${hotelId}`]: 'Removed' }));
+      setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`fav-${hotelId}`]; return p; }), 1400);
     } else {
       updatedFavorites = [...favorites, hotelId];
-      showToast("Added to favorites!", "success");
+      // toast removed by request (keep inline actionFlash)
+      setActionFlash(prev => ({ ...prev, [`fav-${hotelId}`]: 'Added' }));
+      setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`fav-${hotelId}`]; return p; }), 1400);
     }
     setFavorites(updatedFavorites);
     // If user has a server id, persist to DB, otherwise persist to localStorage per-user
@@ -318,6 +339,19 @@ export default function Dashboard() {
     })();
   };
 
+  // When unfavoriting from the Favorites section we want to briefly show the
+  // inline bubble next to the button before the card disappears. This wrapper
+  // shows the actionFlash, waits a short moment for the animation, then calls
+  // toggleFavorite to actually remove the item.
+  const handleUnfavoriteInFavorites = (hotelId) => {
+    // show inline tiny bubble
+    setActionFlash(prev => ({ ...prev, [`fav-${hotelId}`]: 'Removed' }));
+    setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`fav-${hotelId}`]; return p; }), 1200);
+
+    // call toggle after a very small delay so users see the bubble
+    setTimeout(() => toggleFavorite(hotelId), 420);
+  };
+
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -330,8 +364,9 @@ export default function Dashboard() {
       reader.onloadend = () => {
         const base64 = reader.result;
         setProfilePic(base64);
-        localStorage.setItem("user_profile_pic", base64);
-        showToast("Profile picture updated successfully!", "success");
+        // persist per-user so multiple accounts are independent
+        try { localStorage.setItem(`user_profile_pic_${user?.email || 'anonymous'}`, base64); } catch (e) {}
+        // toast removed by request
       };
       reader.onerror = () => {
         showToast("Error reading image file", "error");
@@ -340,35 +375,80 @@ export default function Dashboard() {
     }
   };
 
-  const handleChangePassword = (e) => {
-    e.preventDefault();
-    
-    if (oldPassword !== user.password) {
-      showToast("Old password is incorrect", "error");
-      return;
-    }
-    if (newPassword.length < 6) {
-      showToast("New password must be at least 6 characters", "error");
-      return;
-    }
-    if (newPassword !== confirmNewPassword) {
-      showToast("New passwords do not match", "error");
-      return;
-    }
-    if (newPassword === oldPassword) {
-      showToast("New password must be different from old password", "error");
-      return;
-    }
+  const handleChangePassword = async (e) => {
+  e.preventDefault();
 
-    const updatedUser = { ...user, password: newPassword };
-    localStorage.setItem("hotel_user", JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    setShowChangePassword(false);
-    showToast("Password changed successfully!", "success");
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmNewPassword("");
-  };
+  setPasswordMessage({ text: '', type: '' }); // clear previous message
+
+  if (newPassword !== confirmNewPassword) {
+    setPasswordMessage({ text: 'New passwords do not match', type: 'error' });
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    setPasswordMessage({ text: 'New password must be at least 6 characters', type: 'error' });
+    return;
+  }
+
+  setIsChangingPassword(true);
+
+  try {
+    // Real account in MySQL
+    if (user?.id) {
+      const res = await fetch('/api/users', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          oldPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setPasswordMessage({ text: 'Password changed successfully!', type: 'success' });
+        setTimeout(() => {
+          setShowChangePassword(false);
+          setOldPassword('');
+          setNewPassword('');
+          setConfirmNewPassword('');
+          setPasswordMessage({ text: '', type: '' });
+        }, 2000);
+      } else {
+        setPasswordMessage({ text: data.error || 'Incorrect current password', type: 'error' });
+      }
+    }
+    // Offline / local account
+    else {
+      const localUsers = JSON.parse(localStorage.getItem('hotel_users') || '[]');
+      const current = localUsers.find(u => u.email.toLowerCase() === user.email.toLowerCase());
+
+      if (!current || current.password !== oldPassword) {
+        setPasswordMessage({ text: 'Incorrect current password', type: 'error' });
+      } else {
+        current.password = newPassword;
+        localStorage.setItem('hotel_users', JSON.stringify(localUsers));
+        localStorage.setItem('hotel_user', JSON.stringify({ ...user, password: newPassword }));
+        setUser({ ...user, password: newPassword });
+
+        setPasswordMessage({ text: 'Password updated!', type: 'success' });
+        setTimeout(() => {
+          setShowChangePassword(false);
+          setOldPassword('');
+          setNewPassword('');
+          setConfirmNewPassword('');
+          setPasswordMessage({ text: '', type: '' });
+        }, 2000);
+      }
+    }
+  } catch (err) {
+    setPasswordMessage({ text: 'Connection failed. Try again.', type: 'error' });
+  } finally {
+    setIsChangingPassword(false);
+  }
+};
 
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
@@ -478,17 +558,22 @@ export default function Dashboard() {
     })();
 
     setModalHotel(null);
-    showToast(`Successfully booked ${hotel.name} for ${nights} ${nights === 1 ? 'night' : 'nights'}! 🎉`, "success");
+    // booking success toast removed by request; inline flash still shown
   };
 
   const cancelBooking = (id) => {
+    // Mark as cancelling so UI can show an inline state on the button
+    setCancellingIds(prev => Array.from(new Set([...prev, id])));
+
     const allBookings = JSON.parse(localStorage.getItem("hotel_bookings") || "[]");
     const bookingToCancel = allBookings.find(b => b.id === id) || {};
-    const updatedBookings = allBookings.filter(b => b.id !== id);
-    localStorage.setItem("hotel_bookings", JSON.stringify(updatedBookings));
-    setBookings(prev => prev.filter(b => b.id !== id));
 
-    // If this booking was stored on server, attempt to delete it there too
+    // Immediately persist removal in localStorage (so it's consistent) but keep
+    // the booking visible briefly while we show inline feedback.
+    const updatedBookings = allBookings.filter(b => b.id !== id);
+    try { localStorage.setItem("hotel_bookings", JSON.stringify(updatedBookings)); } catch(e) {}
+
+    // Attempt server delete in background
     (async () => {
       try {
         if (user && user.id && bookingToCancel.serverId) {
@@ -499,7 +584,16 @@ export default function Dashboard() {
       }
     })();
 
-    showToast("Booking cancelled successfully", "success");
+    // Show an inline 'Cancelled' flash next to the button and then remove from UI
+    setActionFlash(prev => ({ ...prev, [`cancel-${id}`]: 'Booking cancelled' }));
+    setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`cancel-${id}`]; return p; }), 1200);
+
+    // Remove booking from UI after a short delay so user sees the inline animation
+    setTimeout(() => {
+      setBookings(prev => prev.filter(b => b.id !== id));
+      setCancellingIds(prev => prev.filter(x => x !== id));
+      // booking cancelled toast removed by request
+    }, 900);
   };
 
   const viewReviews = async (hotelId) => {
@@ -805,37 +899,8 @@ export default function Dashboard() {
           <section id="favorites" className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Your Favorites ({favorites.length})</h2>
-              {favorites.length > 0 && (
-                  <span className={styles.sectionSubtitle}>
-                    Hotels you've liked
-                  </span>
-                )}
-              {/* If we have full favoriteRows from server, show the DB records */}
-              {favoriteRows && favoriteRows.length > 0 && (
-                <div className={styles.favoriteRecords} style={{ marginTop: 12, marginBottom: 12 }}>
-                  <h4 style={{ margin: 0, marginBottom: 8 }}>Favorite records (DB)</h4>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                      <thead>
-                        <tr>
-                          <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '1px solid #e6e6e6' }}>user_id</th>
-                          <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '1px solid #e6e6e6' }}>hotel_id</th>
-                          <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '1px solid #e6e6e6' }}>created_at</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {favoriteRows.map((r, i) => (
-                          <tr key={`fav-${i}`}>
-                            <td style={{ padding: '6px 8px', borderBottom: '1px solid #f3f3f3' }}>{r.user_id}</td>
-                            <td style={{ padding: '6px 8px', borderBottom: '1px solid #f3f3f3' }}>{r.hotel_id}</td>
-                            <td style={{ padding: '6px 8px', borderBottom: '1px solid #f3f3f3' }}>{formatDate(r.created_at || r.createdAt)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+              {/* subtitle intentionally removed */}
+              {/* DB favorite records hidden from production UI */}
             </div>
 
             {favorites.length === 0 ? (
@@ -862,12 +927,19 @@ export default function Dashboard() {
                         <span className={styles.hotelRating}>
                           {hotel.stars} ★
                         </span>
-                        <button 
-                          className={`${styles.favoriteButton} ${styles.favorited}`}
-                          onClick={() => toggleFavorite(hotel.id)}
-                        >
-                          ❤️
-                        </button>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                          <button 
+                            className={`${styles.favoriteButton} ${styles.favorited}`}
+                            onClick={() => handleUnfavoriteInFavorites(hotel.id)}
+                          >
+                            ❤️
+                          </button>
+                          {actionFlash[`fav-${hotel.id}`] && (
+                            <div className={styles.actionFlash} style={{ position: 'absolute', top: -28, right: -6 }}>
+                              {actionFlash[`fav-${hotel.id}`]}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                     
@@ -922,11 +994,7 @@ export default function Dashboard() {
           <section id="bookings" className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Your Bookings ({bookings.length})</h2>
-              {bookings.length > 0 && (
-                <span className={styles.sectionSubtitle}>
-                  Manage your upcoming stays
-                </span>
-              )}
+              {/* subtitle intentionally removed */}
             </div>
             
             {bookings.length === 0 ? (
@@ -957,7 +1025,6 @@ export default function Dashboard() {
                       <p className={styles.hotelLocation}>📍 {booking.location}</p>
 
                       <div className={styles.hotelAmenities}>
-                        {/* show a small booking meta (dates, nights) inside amenities area */}
                         <span className={styles.amenityTag}>📅 {formatDate(booking.checkIn)} - {formatDate(booking.checkOut)}</span>
                         <span className={styles.amenityTag}>{booking.nights} {booking.nights === 1 ? 'night' : 'nights'}</span>
                       </div>
@@ -967,12 +1034,20 @@ export default function Dashboard() {
                           <div className={styles.price}>₱{booking.price}</div>
                           <span className={styles.priceLabel}>/night</span>
                         </div>
-                        <button 
-                          className={styles.cancelButton}
-                          onClick={() => cancelBooking(booking.id)}
-                        >
-                          Cancel
-                        </button>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                          <button 
+                            className={styles.cancelButton}
+                            onClick={() => cancelBooking(booking.id)}
+                            disabled={cancellingIds.includes(booking.id)}
+                          >
+                            {cancellingIds.includes(booking.id) ? 'Cancelling...' : 'Cancel'}
+                          </button>
+                          {actionFlash[`cancel-${booking.id}`] && (
+                            <div className={styles.actionFlash} style={{ position: 'absolute', top: -28, right: -6 }}>
+                              {actionFlash[`cancel-${booking.id}`]}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div style={{marginTop:8, fontSize:13,color:'#5b6770'}}>
@@ -990,9 +1065,7 @@ export default function Dashboard() {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Available Hotels in Davao ({filteredHotels.length})</h2>
-              <span className={styles.sectionSubtitle}>
-                {filteredHotels.length} hotels found
-              </span>
+              {/* hotels count removed */}
             </div>
             
             <div className={styles.hotelGrid}>
@@ -1068,111 +1141,146 @@ export default function Dashboard() {
       </div>
 
       {/* Profile Modal */}
-      {showProfileModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowProfileModal(false)}>
-          <div className={styles.profileModal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>My Profile</h2>
-              <button 
-                className={styles.closeButton}
-                onClick={() => setShowProfileModal(false)}
-              >
-                ✕
-              </button>
-            </div>
+{showProfileModal && (
+  <div className={styles.modalOverlay} onClick={() => setShowProfileModal(false)}>
+    <div className={styles.profileModal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modalHeader}>
+        <h2>My Profile</h2>
+        <button 
+          className={styles.closeButton}
+          onClick={() => setShowProfileModal(false)}
+        >
+          ✕
+        </button>
+      </div>
 
-            <div className={styles.profileContent}>
-              {/* Profile Picture Section */}
-              <div className={styles.profilePictureSection}>
-                <div 
-                  className={styles.profilePictureContainer}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <Image
-                    src={profilePic}
-                    width={140}
-                    height={140}
-                    alt="Profile"
-                    className={styles.profilePicture}
-                  />
-                  <div className={styles.profilePictureEdit}>
-                    ✏️
-                  </div>
-                </div>
-                <input 
-                  ref={fileInputRef} 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleProfilePicChange} 
-                  className={styles.fileInput}
-                />
-                <p className={styles.uploadHint}>Click to upload new photo (max 5MB)</p>
-              </div>
-
-              {/* User Info */}
-              <div className={styles.userInfo}>
-                <h1>{user.name}</h1>
-                <p className={styles.userEmail}>{user.email}</p>
-              </div>
-
-              {/* Change Password */}
-              {!showChangePassword ? (
-                <button
-                  onClick={() => setShowChangePassword(true)}
-                  className={styles.changePasswordButton}
-                >
-                  Change Password
-                </button>
-              ) : (
-                <div className={styles.passwordForm}>
-                  <h3>Change Password</h3>
-                  <form onSubmit={handleChangePassword}>
-                    <div className={styles.formGroup}>
-                      <input
-                        type="password"
-                        placeholder="Old password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <input
-                        type="password"
-                        placeholder="New password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <input
-                        type="password"
-                        placeholder="Confirm new password"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className={styles.passwordActions}>
-                      <button type="submit" className={styles.confirmButton}>
-                        Confirm Change
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={() => setShowChangePassword(false)}
-                        className={styles.cancelButton}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
+      <div className={styles.profileContent}>
+        {/* Profile Picture Section */}
+        <div className={styles.profilePictureSection}>
+          <div 
+            className={styles.profilePictureContainer}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Image
+              src={profilePic}
+              width={140}
+              height={140}
+              alt="Profile"
+              className={styles.profilePicture}
+            />
+            <div className={styles.profilePictureEdit}>
+              Edit
             </div>
           </div>
+          <input 
+            ref={fileInputRef} 
+            type="file" 
+            accept="image/*" 
+            onChange={handleProfilePicChange} 
+            className={styles.fileInput}
+          />
+          <p className={styles.uploadHint}>Click to upload new photo (max 5MB)</p>
         </div>
-      )}
+
+        {/* User Info */}
+        <div className={styles.userInfo}>
+          <h1>{user?.name || 'User'}</h1>
+          <p className={styles.userEmail}>{user?.email}</p>
+        </div>
+
+        {/* Change Password Section */}
+        {!showChangePassword ? (
+          <button
+            onClick={() => setShowChangePassword(true)}
+            className={styles.changePasswordButton}
+          >
+            Change Password
+          </button>
+        ) : (
+          <div className={styles.passwordForm}>
+            <h3>Change Password</h3>
+            <form onSubmit={handleChangePassword}>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  placeholder="Current password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  placeholder="New password (min 6 chars)"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  minLength="6"
+                  autoComplete="new-password"
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  placeholder="Confirm new password"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  required
+                  minLength="6"
+                  autoComplete="new-password"
+                />
+              </div>
+
+              {/* ←←← PUT IT RIGHT HERE ←←←  */}
+              {passwordMessage.text && (
+                <div 
+                  style={{
+                    padding: '12px 16px',
+                    margin: '12px 0',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    textAlign: 'center',
+                    backgroundColor: passwordMessage.type === 'success' ? '#d4edda' : '#f8d7da',
+                    color: passwordMessage.type === 'success' ? '#155724' : '#721c24',
+                    border: `1px solid ${passwordMessage.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
+                  }}
+              >
+              {passwordMessage.text}
+              </div>
+              )}
+              {/* ←←← END OF MESSAGE BOX ←←← */}
+
+              <div className={styles.passwordActions}>
+                <button 
+                  type="submit" 
+                  className={styles.confirmButton}
+                  disabled={isChangingPassword}
+                >
+                  {isChangingPassword ? 'Changing...' : 'Change Password'}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setShowChangePassword(false);
+                    setOldPassword('');
+                    setNewPassword('');
+                    setConfirmNewPassword('');
+                  }}
+                  className={styles.cancelButton}
+                  disabled={isChangingPassword}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Reviews Modal */}
       {showReviews && (
