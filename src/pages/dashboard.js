@@ -102,6 +102,8 @@ export default function Dashboard() {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
+  // small inline review feedback message shown in the Reviews modal
+  const [reviewMessage, setReviewMessage] = useState({ text: '', type: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [loadingReviews, setLoadingReviews] = useState(false);
   // inline UI feedback for actions (e.g., a small 'Removed' bubble next to a button)
@@ -618,6 +620,8 @@ export default function Dashboard() {
       // map server rows to UI-friendly shape
       const mapped = rows.map(r => ({
         id: r.id,
+        userId: r.user_id || null,
+        userEmail: r.user_email || null,
         user: r.user_name || r.user || r.user_email || 'Guest',
         rating: Number(r.rating) || 0,
         comment: r.comment || '',
@@ -641,7 +645,10 @@ export default function Dashboard() {
       return;
     }
     if (!newReview.comment.trim()) {
-      showToast("Please write a review comment", "error");
+      // show a small inline message inside the Reviews modal instead of a global toast
+      setReviewMessage({ text: '✕ Please write a review comment', type: 'error' });
+      // clear after a short duration
+      setTimeout(() => setReviewMessage({ text: '', type: '' }), 3000);
       return;
     }
     if (!selectedReviewHotelId) {
@@ -668,8 +675,15 @@ export default function Dashboard() {
       if (!res) throw new Error('No response from server');
 
       if (res.status === 409) {
+        // When the server signals a conflict/duplicate, show a non-blocking
+        // inline message inside the Reviews modal rather than a global error
+        // toast. This keeps the UI friendly and allows the user to review
+        // other hotels without being blocked by the message.
         const body = await res.json().catch(() => ({}));
-        showToast(body?.error || 'Duplicate review detected', 'error');
+        const text = body?.error || 'Duplicate review detected';
+        setReviewMessage({ text, type: 'info' });
+        // Clear after a short duration
+        setTimeout(() => setReviewMessage({ text: '', type: '' }), 4000);
         return;
       }
 
@@ -707,13 +721,16 @@ export default function Dashboard() {
         // show the just-submitted review at the top and then refresh canonical list
         setSelectedHotelReviews(prev => [mapped, ...(prev || [])]);
         setNewReview({ rating: 5, comment: '' });
-        showToast('Review submitted successfully!', 'success');
+        // show inline success message in the modal instead of a toast
+        setReviewMessage({ text: '✓ Review submitted', type: 'success' });
+        setTimeout(() => setReviewMessage({ text: '', type: '' }), 3000);
 
         // re-fetch canonical list in background to ensure consistency
         try { await viewReviews(selectedReviewHotelId); } catch(_) {}
       } else {
-        showToast('Review saved', 'success');
         setNewReview({ rating: 5, comment: '' });
+        setReviewMessage({ text: '✓ Review saved', type: 'success' });
+        setTimeout(() => setReviewMessage({ text: '', type: '' }), 3000);
         try { await viewReviews(selectedReviewHotelId); } catch(_) {}
       }
     } catch (err) {
@@ -775,7 +792,10 @@ export default function Dashboard() {
         {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div className={styles.sidebarHeader}>
-            <h2>🏨 White Flower</h2>
+            <h2 style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+              <Image src="/hotels.png" width={28} height={28} alt="Hotels" />
+              <span>White Flower Stays</span>
+            </h2>
             <p className={styles.welcomeText}>Hello, {user.name.split(" ")[0]}! 👋</p>
           </div>
           
@@ -784,31 +804,46 @@ export default function Dashboard() {
               className={`${styles.navButton} ${styles.active}`}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-              🏠 Discover Hotels
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/bed.png" width={18} height={18} alt="Discover" />
+                <span>Discover Hotels</span>
+              </span>
             </button>
             <button 
               className={styles.navButton}
               onClick={() => document.getElementById("bookings")?.scrollIntoView({ behavior: "smooth" })}
             >
-              📋 My Bookings ({bookings.length})
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/book.png" width={18} height={18} alt="Bookings" />
+                <span>My Bookings ({bookings.length})</span>
+              </span>
             </button>
             <button 
               className={styles.navButton}
               onClick={() => document.getElementById("favorites")?.scrollIntoView({ behavior: "smooth" })}
             >
-              ❤️ Favorites ({favorites.length})
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/love.png" width={18} height={18} alt="Favorites" />
+                <span>Favorites ({favorites.length})</span>
+              </span>
             </button>
             <button 
               className={styles.navButton}
               onClick={() => setShowProfileModal(true)}
             >
-              👤 My Profile
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/user.png" width={18} height={18} alt="Profile" />
+                <span>My Profile</span>
+              </span>
             </button>
           </nav>
 
           <div className={styles.sidebarFooter}>
             <button className={styles.logoutButton} onClick={logout}>
-              🚪 Logout
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/exit.png" width={18} height={18} alt="Logout" />
+                <span>Logout</span>
+              </span>
             </button>
           </div>
         </aside>
@@ -824,7 +859,9 @@ export default function Dashboard() {
             
             <div className={styles.searchSection}>
               <div className={styles.searchBox}>
-                <span className={styles.searchIcon}>🔍</span>
+                <span className={styles.searchIcon} style={{ display:'inline-flex', alignItems:'center' }}>
+                  <Image src="/search.png" width={16} height={16} alt="Search" />
+                </span>
                 <input
                   type="text"
                   placeholder="Search hotels or locations..."
@@ -905,7 +942,9 @@ export default function Dashboard() {
 
             {favorites.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>❤️</div>
+                <div className={styles.emptyIcon}>
+                  <Image src="/love.png" width={56} height={56} alt="No favorites" />
+                </div>
                 <h3>No favorites yet</h3>
                 <p>Click the heart icon on hotels to add them to your favorites!</p>
               </div>
@@ -999,7 +1038,9 @@ export default function Dashboard() {
             
             {bookings.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>📋</div>
+                <div className={styles.emptyIcon}>
+                  <Image src="/book.png" width={56} height={56} alt="No bookings" />
+                </div>
                 <h3>No bookings yet</h3>
                 <p>Start exploring our hotels and book your first stay!</p>
               </div>
@@ -1334,10 +1375,24 @@ export default function Dashboard() {
                 <textarea
                   placeholder="Share your experience..."
                   value={newReview.comment}
-                  onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+                  onChange={(e) => { setNewReview({...newReview, comment: e.target.value}); if (reviewMessage.text) setReviewMessage({ text: '', type: '' }); }}
                   className={styles.reviewTextarea}
                   rows="4"
                 />
+                {reviewMessage.text && (
+                  <div style={{
+                    padding: '8px 12px',
+                    marginTop: 10,
+                    borderRadius: 8,
+                    fontSize: 13,
+                    textAlign: 'center',
+                    backgroundColor: reviewMessage.type === 'success' ? '#d4edda' : '#f8d7da',
+                    color: reviewMessage.type === 'success' ? '#155724' : '#721c24',
+                    border: `1px solid ${reviewMessage.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`
+                  }}>
+                    {reviewMessage.text}
+                  </div>
+                )}
                 <button
                   className={styles.submitReviewButton}
                   onClick={submitReview}
