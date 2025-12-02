@@ -1,3 +1,22 @@
+/* small inline action flash used near buttons (e.g., favorite/cancel) */
+.actionFlash {
+  background: rgba(17, 24, 39, 0.95);
+  color: #fff;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(2,6,23,0.25);
+  display: inline-block;
+  white-space: nowrap;
+  z-index: 200;
+  transform-origin: center center;
+  animation: actionFlashPop 360ms cubic-bezier(.2,.9,.3,1);
+}
+
+@keyframes actionFlashPop {
+  from { opacity: 0; transform: translateY(6px) scale(.92); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
 /* styles/Home.module.css - COMPLETE FIXED VERSION */
 
 /* Hero Section */
