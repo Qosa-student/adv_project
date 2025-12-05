@@ -1,5 +1,6 @@
 // pages/login.js - IMPROVED
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
@@ -73,6 +74,11 @@ export default function Login() {
     if (res.ok) {
       localStorage.setItem("hotel_auth", "true");
       localStorage.setItem("hotel_user", JSON.stringify(data));
+      // ensure this user has a per-user default avatar (don't overwrite existing)
+      try {
+        const perUserKey = `user_profile_pic_${(data && (data.email || data.email))}`;
+        if (!localStorage.getItem(perUserKey)) localStorage.setItem(perUserKey, '/default-avatar.avif');
+      } catch (e) {}
       // show welcome modal then redirect
       setModalType("success");
       setModalMessage("Welcome back! Redirecting to dashboard...");
@@ -89,6 +95,7 @@ export default function Login() {
         if (found.password === formData.password) {
           localStorage.setItem('hotel_auth', 'true');
           localStorage.setItem('hotel_user', JSON.stringify(found));
+          try { const perUserKey = `user_profile_pic_${found.email}`; if (!localStorage.getItem(perUserKey)) localStorage.setItem(perUserKey, '/default-avatar.avif'); } catch (e) {}
           setModalType('success');
           setModalMessage('Login successful! Redirecting to dashboard...');
           setTimeout(() => {
@@ -165,8 +172,9 @@ export default function Login() {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  <Image src={showPassword ? '/visible.png' : '/invisible.png'} width={20} height={20} alt={showPassword ? 'Visible' : 'Hidden'} />
                 </button>
               </div>
               {errors.password && <span className={styles.errorText}>{errors.password}</span>}
@@ -196,19 +204,6 @@ export default function Login() {
               >
                 Create Account
               </button>
-            </div>
-
-            <div className={styles.authFooter}>
-              <p>
-                Don&apos;t have an account?{" "}
-                <button 
-                  type="button" 
-                  onClick={() => router.push("/register")}
-                  className={styles.linkButton}
-                >
-                  Sign up here
-                </button>
-              </p>
             </div>
           </form>
         </div>

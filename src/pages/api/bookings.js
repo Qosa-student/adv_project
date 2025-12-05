@@ -32,15 +32,28 @@ export default async function handler(req, res) {
 			return res.status(200).json({ bookings: rows });
 		}
 
-		if (req.method === 'POST') {
-			console.info('[bookings] POST payload:', req.body || {});
-			let { userId, hotelId, checkIn, checkOut, total_nights, total_price, status = 'confirmed', userEmail, userName } = req.body || {};
-			// allow creating by providing userId OR userEmail (server will create/find). hotelId, checkIn, checkOut and total_price are required
-			if ((!userId && !userEmail) || !hotelId || !checkIn || !checkOut || typeof total_price === 'undefined') {
-				return res.status(400).json({ error: 'Missing required booking fields (userId|userEmail, hotelId, checkIn, checkOut, total_price)' });
-			}
+	if (req.method === 'POST') {
+		console.info('[bookings] POST payload:', req.body || {});
+		let { userId, hotelId, checkIn, checkOut, total_nights, total_price, status = 'confirmed', userEmail, userName, hotelName, price } = req.body || {};
+		// allow creating by providing userId OR userEmail (server will create/find). hotelId, checkIn, checkOut and total_price are required
+		if ((!userId && !userEmail) || !hotelId || !checkIn || !checkOut || typeof total_price === 'undefined') {
+			return res.status(400).json({ error: 'Missing required booking fields (userId|userEmail, hotelId, checkIn, checkOut, total_price)' });
+		}
 
-			// If userId missing but an email was provided, attempt server-side find-or-create user
+		// If hotelName not provided, attempt to fetch from hotels table
+		let finalHotelName = hotelName;
+		let finalPrice = price;
+		if (!finalHotelName || typeof finalPrice === 'undefined') {
+			try {
+				const [hotel] = await db.query('SELECT name, price FROM hotels WHERE id = ? LIMIT 1', [hotelId]);
+				if (Array.isArray(hotel) && hotel.length) {
+					if (!finalHotelName) finalHotelName = hotel[0].name;
+					if (typeof finalPrice === 'undefined') finalPrice = hotel[0].price;
+				}
+			} catch (e) {
+				console.warn('[bookings] failed to fetch hotel details', e);
+			}
+		}			// If userId missing but an email was provided, attempt server-side find-or-create user
 			if (!userId && userEmail) {
 				try {
 					// try find
@@ -91,15 +104,13 @@ export default async function handler(req, res) {
 				nights = total_nights || 1;
 			}
 
-			try {
-				// Insert without total_nights — many schemas use a generated/stored total_nights column (DATEDIFF)
-				const insertSql = 'INSERT INTO bookings (user_id, hotel_id, check_in, check_out, total_price, status) VALUES (?, ?, ?, ?, ?, ?)';
-				// normalize numeric ids
-				userId = Number(userId);
-				hotelId = Number(hotelId);
-				const [result] = await db.query(insertSql, [userId, hotelId, checkIn, checkOut, total_price, status]);
-
-								// final verification: ensure user_id is set (try one last resolve by email)
+		try {
+			// Insert with hotel_name and price — many schemas use a generated/stored total_nights column (DATEDIFF)
+			const insertSql = 'INSERT INTO bookings (user_id, hotel_id, hotel_name, price, check_in, check_out, total_price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+			// normalize numeric ids
+			userId = Number(userId);
+			hotelId = Number(hotelId);
+			const [result] = await db.query(insertSql, [userId, hotelId, finalHotelName || '', finalPrice || 0, checkIn, checkOut, total_price, status]);								// final verification: ensure user_id is set (try one last resolve by email)
 								if (!userId && userEmail) {
 									try {
 										const [maybe] = await db.query('SELECT id FROM users WHERE email = ? LIMIT 1', [userEmail.toLowerCase()]);
@@ -130,7 +141,8 @@ export default async function handler(req, res) {
 		if (req.method === 'DELETE') {
 			const bookingId = req.query.bookingId || req.body?.bookingId;
 			const userId = req.query.userId || req.body?.userId;
-			const hotelId = req.query.hotelId || req.body?.hotelId;
+			let hotelId = req.query.hotelId || req.body?.hotelId;
+			const hotelName = req.query.hotelName || req.body?.hotelName;
 
 			if (bookingId) {
 				const [rows] = await db.query('SELECT id, user_id, hotel_id, check_in, check_out, total_nights, total_price, status, booked_at, booked_at AS createdAt FROM bookings WHERE id = ? LIMIT 1', [bookingId]);
@@ -138,7 +150,17 @@ export default async function handler(req, res) {
 				return res.status(200).json({ success: true, deleted: rows && rows[0] ? rows[0] : null });
 			}
 
-			if (!(userId && hotelId)) return res.status(400).json({ error: 'provide bookingId or userId+hotelId to delete' });
+			// If hotelId is not provided but hotelName is provided, try to resolve it
+			if (!hotelId && hotelName) {
+				try {
+					const [hrows] = await db.query('SELECT id FROM hotels WHERE name = ? LIMIT 1', [hotelName]);
+					if (Array.isArray(hrows) && hrows.length) hotelId = hrows[0].id;
+				} catch (e) {
+					console.warn('[bookings] failed to resolve hotelName to id', e);
+				}
+			}
+
+			if (!(userId && hotelId)) return res.status(400).json({ error: 'provide bookingId or userId+hotelId (or hotelName) to delete' });
 
 			// delete by user+hotel (and optional dates if supplied)
 			const checkIn = req.query.checkIn || req.body?.checkIn;

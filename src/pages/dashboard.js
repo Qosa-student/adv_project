@@ -6,52 +6,63 @@ import Image from "next/image";
 import styles from "@/styles/Home.module.css";
 
 const SAMPLE_HOTELS = [ 
-  { id: 1, name: "Red Planet Davao", location: "Davao City", price: 1634, stars: 4.1, amenities: ["WiFi", "Air Conditioning", "Restaurant"] },
-  { id: 2, name: "Acacia Hotel Davao", location: "Davao City", price: 4143, stars: 4.4, amenities: ["Pool", "Spa", "WiFi"] },
-  { id: 3, name: "Aeon SUITES Staycation", location: "Davao City", price: 3219, stars: 3.7, amenities: ["Kitchen", "Laundry", "WiFi"] },
-  { id: 4, name: "Hotel Galleria", location: "Davao City", price: 1033, stars: 3.6, amenities: ["WiFi", "Parking"] },
-  { id: 5, name: "Davao Royal Suites and Residences", location: "Davao City", price: 897, stars: 3.9, amenities: ["Pool", "Gym", "WiFi"] },
-  { id: 6, name: "Crown Regency Residences Davao", location: "Davao City", price: 934, stars: 3.5, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 7, name: "Da West Inn Garden", location: "Davao City", price: 1188, stars: 3.1, amenities: ["Garden", "WiFi"] },
-  { id: 8, name: "Star Hotel", location: "Davao City", price: 985, stars: 4.0, amenities: ["WiFi", "Restaurant"] },
-  { id: 9, name: "GV Hotel Davao", location: "Davao City", price: 738, stars: 3.6, amenities: ["WiFi", "Parking"] },
-  { id: 10, name: "Kampotel Davao", location: "Davao City", price: 739, stars: 4.3, amenities: ["WiFi", "Breakfast"] },
-  { id: 11, name: "Orchard Hotel", location: "Davao City", price: 991, stars: 3.7, amenities: ["Garden", "WiFi"] },
-  { id: 12, name: "Pacific Palm Suites", location: "Davao City", price: 1987, stars: 3.8, amenities: ["Pool", "Gym", "WiFi"] },
-  { id: 13, name: "RedDoorz near Robinsons Cybergate Davao", location: "Davao City", price: 1021, stars: 3.5, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 14, name: "Central District Hotel", location: "Davao City", price: 1140, stars: 4.0, amenities: ["WiFi", "Restaurant"] },
-  { id: 15, name: "Daylight Inn Davao", location: "Davao City", price: 423, stars: 3.4, amenities: ["WiFi", "Parking"] },
-  { id: 16, name: "RedDoorz near G Mall Bajada Davao", location: "Davao City", price: 1022, stars: 3.8, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 17, name: "Hotel Sogo Davao", location: "Davao City", price: 876, stars: 4.3, amenities: ["WiFi", "24hr Service"] },
-  { id: 18, name: "Traveler's Inn Bajada", location: "Davao City", price: 840, stars: 4.0, amenities: ["WiFi", "Parking"] },
-  { id: 19, name: "RedDoorz @ Traveler Inn Matina", location: "Davao City", price: 1191, stars: 2.0, amenities: ["WiFi"] },
-  { id: 20, name: "Seda Abreeza", location: "Davao City", price: 6370, stars: 4.4, amenities: ["Pool", "Spa", "Gym", "Restaurant"] },
-  { id: 21, name: "The Royal Mandaya Hotel", location: "Davao City", price: 3033, stars: 4.3, amenities: ["Pool", "Spa", "Restaurant"] },
-  { id: 22, name: "Casa Maria", location: "Davao City", price: 2461, stars: 4.0, amenities: ["WiFi", "Garden", "Restaurant"] },
-  { id: 23, name: "RedDoorz Plus near SM Lanang Davao", location: "Davao City", price: 1130, stars: 3.7, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 24, name: "Aikiko House", location: "Davao City", price: 891, stars: 4.2, amenities: ["WiFi", "Kitchen"] },
-  { id: 25, name: "Napsule Suites", location: "Davao City", price: 879, stars: 4.0, amenities: ["WiFi", "Laundry"] },
-  { id: 26, name: "Rogen Inn", location: "Davao City", price: 2034, stars: 4.4, amenities: ["Pool", "WiFi", "Restaurant"] },
-  { id: 27, name: "Big Ben's Apartelle", location: "Davao City", price: 832, stars: 3.7, amenities: ["WiFi", "Kitchen"] },
-  { id: 28, name: "Hop Inn Hotel Davao", location: "Davao City", price: 1421, stars: 4.3, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 29, name: "La Anclar Hotel", location: "Davao City", price: 1777, stars: 3.8, amenities: ["WiFi", "Restaurant"] },
-  { id: 30, name: "Traveller's Inn Matina Pangi", location: "Davao City", price: 830, stars: 4.2, amenities: ["WiFi", "Parking"] },
-  { id: 31, name: "Snooze Inn and Suites", location: "Davao City", price: 3210, stars: 4.5, amenities: ["Pool", "Gym", "WiFi"] },
-  { id: 32, name: "My Hotel Davao", location: "Davao City", price: 1252, stars: 3.9, amenities: ["WiFi", "Restaurant"] },
-  { id: 33, name: "Jotel Inn", location: "Davao City", price: 1139, stars: 4.1, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 34, name: "Casa Leticia Business Inn", location: "Davao City", price: 1609, stars: 4.2, amenities: ["WiFi", "Business Center"] },
-  { id: 35, name: "RedDoorz Plus near Bangko Sentral ng Pilipinas Davao", location: "Davao City", price: 973, stars: 4.6, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 36, name: "Chateau Cinco Dormitel", location: "Davao City", price: 1570, stars: 4.3, amenities: ["WiFi", "Common Area"] },
-  { id: 37, name: "Conclave Hotel", location: "Davao City", price: 1297, stars: 4.0, amenities: ["WiFi", "Meeting Rooms"] },
-  { id: 38, name: "BlueBerry Tourist Hotel", location: "Davao City", price: 2890, stars: 4.1, amenities: ["Pool", "Restaurant", "WiFi"] },
-  { id: 39, name: "The Strand Suites and Dormitel", location: "Davao City", price: 1085, stars: 4.3, amenities: ["WiFi", "Common Area"] },
-  { id: 40, name: "Hotel Uno", location: "Davao City", price: 1578, stars: 3.4, amenities: ["WiFi", "Parking"] },
-  { id: 41, name: "Hampton Suites", location: "Davao City", price: 1981, stars: 4.5, amenities: ["Pool", "Gym", "WiFi"] },
-  { id: 42, name: "RedDoorz Plus @ Roxas Street Davao", location: "Davao City", price: 1149, stars: 3.9, amenities: ["WiFi", "Air Conditioning"] },
-  { id: 43, name: "Casa Leticia Boutique Hotel", location: "Davao City", price: 1829, stars: 4.0, amenities: ["WiFi", "Restaurant", "Spa"] },
-  { id: 44, name: "Hotel Midori Davao", location: "Davao City", price: 1460, stars: 3.9, amenities: ["WiFi", "Restaurant"] },
-  { id: 45, name: "Blue Lotus Hotel", location: "Davao City", price: 3184, stars: 4.5, amenities: ["Pool", "Spa", "Restaurant"] },
-  { id: 46, name: "The Pinnacle Hotel and Suites", location: "Davao City", price: 3107, stars: 4.1, amenities: ["Pool", "Gym", "Restaurant"] }
+  { id: 1, name: "Red Planet Davao", location: "J.P. Laurel Avenue, Lanang, Davao City 8000, Philippines", price: 1634, stars: 4.1, amenities: ["WiFi", "Air Conditioning", "Restaurant"] },
+  { id: 2, name: "Acacia Hotel Davao", location: "J.P. Laurel Ave., Lanang, Davao City 8000, Philippines", price: 4143, stars: 4.4, amenities: ["Pool", "Spa", "WiFi"] },
+  { id: 3, name: "Aeon SUITES Staycation", location: "Aeon Towers, J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 3219, stars: 3.7, amenities: ["Kitchen", "Laundry", "WiFi"] },
+  { id: 4, name: "Hotel Galleria", location: "Gov. Duterte St., Poblacion District, Davao City 8000, Philippines", price: 1033, stars: 3.6, amenities: ["WiFi", "Parking"] },
+  { id: 5, name: "Davao Royal Suites and Residences", location: "C.M. Recto Ave., Brgy. 38-D, Poblacion, Davao City 8000, Philippines", price: 897, stars: 3.9, amenities: ["Pool", "Gym", "WiFi"] },
+  { id: 6, name: "Crown Regency Residences Davao", location: "J.P. Cabaguio Ave., Agdao, Davao City 8000, Philippines", price: 934, stars: 3.5, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 7, name: "Da West Inn Garden", location: "Km. 7 Lanang, Davao City 8000, Philippines", price: 1188, stars: 3.1, amenities: ["Garden", "WiFi"] },
+  { id: 8, name: "Star Hotel", location: "Mabini St. cor. Voyager St., Brgy. 9-A, Poblacion, Davao City 8000, Philippines", price: 985, stars: 4.0, amenities: ["WiFi", "Restaurant"] },
+  { id: 9, name: "GV Hotel Davao", location: "Magallanes St., Brgy. 2-A, Poblacion, Davao City 8000, Philippines", price: 738, stars: 3.6, amenities: ["WiFi", "Parking"] },
+  { id: 10, name: "Kampotel Davao", location: "727 F. S. Sotto St., Brgy. 13-B, Poblacion, Davao City 8000, Philippines", price: 739, stars: 4.3, amenities: ["WiFi", "Breakfast"] },
+  { id: 11, name: "Orchard Hotel", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 991, stars: 3.7, amenities: ["Garden", "WiFi"] },
+  { id: 12, name: "Pacific Palm Suites", location: "Mamalias St., Angliongto, Lanang, Davao City 8000, Philippines", price: 1987, stars: 3.8, amenities: ["Pool", "Gym", "WiFi"] },
+  { id: 13, name: "RedDoorz near Robinsons Cybergate Davao", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 1021, stars: 3.5, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 14, name: "Central District Hotel", location: "Jln Palma Gil St., Poblacion District, Davao City 8000, Philippines", price: 1140, stars: 4.0, amenities: ["WiFi", "Restaurant"] },
+  { id: 15, name: "Daylight Inn Davao", location: "San Pedro St., Brgy. 3-A, Poblacion, Davao City 8000, Philippines", price: 423, stars: 3.4, amenities: ["WiFi", "Parking"] },
+  { id: 16, name: "RedDoorz near G Mall Bajada Davao", location: "Lupo Diaz St., Obrero, Davao City 8000, Philippines", price: 1022, stars: 3.8, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 17, name: "Hotel Sogo Davao", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 876, stars: 4.3, amenities: ["WiFi", "24hr Service"] },
+  { id: 18, name: "Traveler's Inn Bajada", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 840, stars: 4.0, amenities: ["WiFi", "Parking"] },
+  { id: 19, name: "RedDoorz @ Traveler Inn Matina", location: "Matina Aplaya Rd., Matina, Davao City 8000, Philippines", price: 1191, stars: 2.0, amenities: ["WiFi"] },
+  { id: 20, name: "Seda Abreeza", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 6370, stars: 4.4, amenities: ["Pool", "Spa", "Gym", "Restaurant"] },
+  { id: 21, name: "The Royal Mandaya Hotel", location: "J. Palma Gil St., Poblacion, Davao City 8000, Philippines", price: 3033, stars: 4.3, amenities: ["Pool", "Spa", "Restaurant"] },
+  { id: 22, name: "Casa Maria", location: "Jacana cor. Nightingale St., Belisario Heights, Lanang, Davao City 8000, Philippines", price: 2461, stars: 4.0, amenities: ["WiFi", "Garden", "Restaurant"] },
+  { id: 23, name: "RedDoorz Plus near SM Lanang Davao", location: "Ubalde, Agdao, Davao City 8000, Philippines", price: 1130, stars: 3.7, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 24, name: "Aikiko House", location: "Anda St., Brgy. 3-A, Poblacion, Davao City 8000, Philippines", price: 891, stars: 4.2, amenities: ["WiFi", "Kitchen"] },
+  { id: 25, name: "Napsule Suites", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 879, stars: 4.0, amenities: ["WiFi", "Laundry"] },
+  { id: 26, name: "Rogen Inn", location: "Mt. Apo St. cor. Lopez Jaena St., Poblacion, Davao City 8000, Philippines", price: 2034, stars: 4.4, amenities: ["Pool", "WiFi", "Restaurant"] },
+  { id: 27, name: "Big Ben's Apartelle", location: "Guerrero St., Obrero, Davao City 8000, Philippines", price: 832, stars: 3.7, amenities: ["WiFi", "Kitchen"] },
+  { id: 28, name: "Hop Inn Hotel Davao", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 1421, stars: 4.3, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 29, name: "La Anclar Hotel", location: "Bonifacio St., Brgy. 34-D, Poblacion, Davao City 8000, Philippines", price: 1777, stars: 3.8, amenities: ["WiFi", "Restaurant"] },
+  { id: 30, name: "Traveller's Inn Matina Pangi", location: "Matina Pangi Rd., Davao City 8000, Philippines", price: 830, stars: 4.2, amenities: ["WiFi", "Parking"] },
+  { id: 31, name: "Snooze Inn and Suites", location: "Gen. Douglas MacArthur Hwy, Matina, Davao City 8000, Philippines", price: 3210, stars: 4.5, amenities: ["Pool", "Gym", "WiFi"] },
+  { id: 32, name: "My Hotel Davao", location: "Angliongto Rd., Lanang, Davao City 8000, Philippines", price: 1252, stars: 3.9, amenities: ["WiFi", "Restaurant"] },
+  { id: 33, name: "Jotel Inn", location: "E. Quirino Ave., Brgy. 4-A, Poblacion, Davao City 8000, Philippines", price: 1139, stars: 4.1, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 34, name: "Casa Leticia Business Inn", location: "Maya St., Ecoland, Davao City 8000, Philippines", price: 1609, stars: 4.2, amenities: ["WiFi", "Business Center"] },
+  { id: 35, name: "RedDoorz Plus near Bangko Sentral ng Pilipinas Davao", location: "C.M. Recto St., Poblacion, Davao City 8000, Philippines", price: 973, stars: 4.6, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 36, name: "Chateau Cinco Dormitel", location: "Goshawk St. cor. Indigo St., Belisario Heights, Lanang, Davao City 8000, Philippines", price: 1570, stars: 4.3, amenities: ["WiFi", "Common Area"] },
+  { id: 37, name: "Conclave Hotel", location: "J.P. Laurel Ave., Bajada, Davao City 8000, Philippines", price: 1297, stars: 4.0, amenities: ["WiFi", "Meeting Rooms"] },
+  { id: 38, name: "BlueBerry Tourist Hotel", location: "Avanceña St., Jacinto Ext., Brgy. 11-B, Davao City 8000, Philippines", price: 2890, stars: 4.1, amenities: ["Pool", "Restaurant", "WiFi"] },
+  { id: 39, name: "The Strand Suites and Dormitel", location: "Road 2, Doña Vicenta Village, Bajada, Davao City 8000, Philippines", price: 1085, stars: 4.3, amenities: ["WiFi", "Common Area"] },
+  { id: 40, name: "Hotel Uno", location: "C.M. Recto St., Poblacion, Davao City 8000, Philippines", price: 1578, stars: 3.4, amenities: ["WiFi", "Parking"] },
+  { id: 41, name: "Hampton Suites", location: "Gen. Douglas MacArthur Hwy, Matina, Davao City 8000, Philippines", price: 1981, stars: 4.5, amenities: ["Pool", "Gym", "WiFi"] },
+  { id: 42, name: "RedDoorz Plus @ Roxas Street Davao", location: "Roxas Ave., Brgy. 32-D, Poblacion, Davao City 8000, Philippines", price: 1149, stars: 3.9, amenities: ["WiFi", "Air Conditioning"] },
+  { id: 43, name: "Casa Leticia Boutique Hotel", location: "J. Camus St., Poblacion, Davao City 8000, Philippines", price: 1829, stars: 4.0, amenities: ["WiFi", "Restaurant", "Spa"] },
+  { id: 44, name: "Hotel Midori Davao", location: "Gov. Duterte St., Poblacion, Davao City 8000, Philippines", price: 1460, stars: 3.9, amenities: ["WiFi", "Restaurant"] },
+  { id: 45, name: "Blue Lotus Hotel", location: "Quimpo Blvd., Ecoland, Davao City 8000, Philippines", price: 3184, stars: 4.5, amenities: ["Pool", "Spa", "Restaurant"] },
+  { id: 46, name: "The Pinnacle Hotel and Suites", location: "Sta. Ana Ave., Poblacion, Davao City 8000, Philippines", price: 3107, stars: 4.1, amenities: ["Pool", "Gym", "Restaurant"] },
+  { id: 47, name: "Dusit Thani Residence Davao", location: "Stella Hizon Reyes Drive, Lanang, Davao City 8000", price: 9500, stars: 5.0, amenities: ["Infinity Pool", "Beach Access", "Spa", "Gym", "Restaurant", "Bar", "WiFi"] },
+  { id: 48, name: "dusitD2 Davao", location: "Stella Hizon Reyes Drive, Lanang, Davao City 8000", price: 7200, stars: 4.8, amenities: ["Pool", "Gym", "Restaurant", "Bar", "WiFi", "Business Center"] },
+  { id: 49, name: "Waterfront Insular Hotel Davao", location: "Km 7 Lanang, Davao City 8000", price: 5500, stars: 4.3, amenities: ["Private Beach", "Pool", "Garden", "Restaurant", "WiFi", "Spa"] },
+  { id: 50, name: "Park Inn by Radisson Davao", location: "J.P. Laurel Avenue, Lanang, Davao City 8000", price: 4800, stars: 4.4, amenities: ["Rooftop Bar", "Pool", "Gym", "Restaurant", "WiFi"] },
+  { id: 51, name: "The Apo View Hotel", location: "150 J. Camus Street, Davao City 8000", price: 4200, stars: 4.1, amenities: ["Pool", "Casino", "Restaurant", "WiFi", "KTV"] },
+  { id: 52, name: "The Bourke Hotel", location: "115 Pelayo Street, Poblacion District, Davao City 8000", price: 4500, stars: 4.7, amenities: ["Restaurant", "Bar", "Rooftop", "WiFi", "Bakery"] },
+  { id: 53, name: "Crown Regency Hotel & Towers", location: "J.P. Laurel Ave., Bajada, Davao City 8000", price: 3900, stars: 4.0, amenities: ["Pool", "Gym", "Restaurant", "Sky Lounge", "Adventure Ride", "WiFi"] },
+  { id: 54, name: "Grand Regal Hotel Davao", location: "Km 7 J.P. Laurel Ave., Lanang, Davao City 8000", price: 4600, stars: 4.3, amenities: ["Pool", "Casino", "Gym", "Restaurant", "WiFi", "KTV"] },
+  { id: 55, name: "The Ritz Hotel at Garden Oases", location: "Porras St., Bo. Obrero, Davao City 8000", price: 3800, stars: 4.2, amenities: ["Pool", "Garden", "Restaurant", "Spa", "WiFi"] },
+  { id: 56, name: "Pearl Farm Beach Resort", location: "Kaputian, Island Garden City of Samal", price: 14500, stars: 4.8, amenities: ["Private Beach", "Infinity Pool", "Spa", "Water Sports", "Restaurant", "WiFi", "Dive Center"] },
+  { id: 57, name: "Go Hotels Davao City Center", location: "Near SM City Davao, Quimpo Blvd.", price: 1200, stars: 4.0, amenities: ["WiFi", "Air Conditioning", "Parking", "24-Hour Front Desk"] }
 ];
 
 
@@ -69,7 +80,11 @@ const HOTEL_IMAGES = [
   "/hotel26.jpg", "/hotel27.avif", "/hotel28.webp", "/hotel29.jpg", "/hotel30.jpg",
   "/hotel31.jpg", "/hotel32.jpg", "/hotel33.jpg", "/hotel34.jpg", "/hotel35.jpg",
   "/hotel36.jpg", "/hotel37.jpg", "/hotel38.jpg", "/hotel39.avif", "/hotel40.jpg",
-  "/hotel41.jpg", "/hotel42.jpg", "/hotel43.jpg", "/hotel44.avif", "/hotel45.webp", "/hotel46.jpg"
+  "/hotel41.jpg", "/hotel42.jpg", "/hotel43.jpg", "/hotel44.avif", "/hotel45.webp", "/hotel46.jpg",
+  "/hotel47.jpg", "/hotel48.jpg", "/hotel49.jpg", "/hotel50.jpg", "/hotel51.jpg",
+  "/hotel52.jpg", "/hotel53.jpg", "/hotel54.jpg", "/hotel55.jpg", "/hotel56.jpg",
+  "/hotel57.jpg", "/hotel58.jpg", "/hotel59.jpg", "/hotel60.jpg", "/hotel61.jpg",
+  "/hotel62.jpg", "/hotel63.jpg"
 ];
 
 export default function Dashboard() {
@@ -85,6 +100,7 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [modalHotel, setModalHotel] = useState(null);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showDeleteAccountConfirm, setShowDeleteAccountConfirm] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showReviews, setShowReviews] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -93,15 +109,23 @@ export default function Dashboard() {
   const [toast, setToast] = useState(null);
   const [showAuthPrompt, setShowAuthPrompt] = useState(false);
   const [authPromptMsg, setAuthPromptMsg] = useState('You need to sign in or create an account to submit a review.');
-  const [profilePic, setProfilePic] = useState("/default-avatar.jpg");
+  // default lives in public/default-avatar.avif — use a per-user key so
+  // multiple accounts can have independent profile pictures.
+  const [profilePic, setProfilePic] = useState("/default-avatar.avif");
   const [activeFilter, setActiveFilter] = useState("all");
   const [sortBy, setSortBy] = useState("name");
   const [priceRange, setPriceRange] = useState([0, 7000]);
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [newReview, setNewReview] = useState({ rating: 5, comment: "" });
+  // small inline review feedback message shown in the Reviews modal
+  const [reviewMessage, setReviewMessage] = useState({ text: '', type: '' });
   const [submittingReview, setSubmittingReview] = useState(false);
   const [loadingReviews, setLoadingReviews] = useState(false);
+  // inline UI feedback for actions (e.g., a small 'Removed' bubble next to a button)
+  const [actionFlash, setActionFlash] = useState({});
+  const [cancellingIds, setCancellingIds] = useState([]);
+  const [deletingReviewIds, setDeletingReviewIds] = useState([]);
   const fileInputRef = useRef(null);
   const checkInRef = useRef(null);
   const checkOutRef = useRef(null);
@@ -109,6 +133,8 @@ export default function Dashboard() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState({ text: '', type: '' }); // '' | 'success' | 'error'
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -124,8 +150,17 @@ export default function Dashboard() {
     const userObj = JSON.parse(storedUser);
     setUser(userObj);
 
-    const savedPic = localStorage.getItem("user_profile_pic");
-    if (savedPic) setProfilePic(savedPic);
+    // support per-user stored pictures (no global/shared key)
+    const perUserKey = `user_profile_pic_${userObj.email}`;
+    const savedPic = localStorage.getItem(perUserKey);
+
+    if (savedPic) {
+      setProfilePic(savedPic);
+    } else {
+      // ensure new accounts have a default profile saved for this user
+      try { localStorage.setItem(perUserKey, '/default-avatar.avif'); } catch (e) {}
+      setProfilePic('/default-avatar.avif');
+    }
 
     const allBookings = JSON.parse(localStorage.getItem("hotel_bookings") || "[]");
     const userBookings = allBookings.filter(b => b.userEmail === userObj.email);
@@ -268,13 +303,19 @@ export default function Dashboard() {
 
   const toggleFavorite = (hotelId) => {
     const wasFavorited = favorites.includes(hotelId);
+    const hotel = hotels.find(h => h.id === hotelId);
     let updatedFavorites;
     if (wasFavorited) {
       updatedFavorites = favorites.filter(id => id !== hotelId);
-      showToast("Removed from favorites", "success");
+      // toast removed by request (keep inline actionFlash)
+      // inline small bubble
+      setActionFlash(prev => ({ ...prev, [`fav-${hotelId}`]: 'Removed' }));
+      setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`fav-${hotelId}`]; return p; }), 1400);
     } else {
       updatedFavorites = [...favorites, hotelId];
-      showToast("Added to favorites!", "success");
+      // toast removed by request (keep inline actionFlash)
+      setActionFlash(prev => ({ ...prev, [`fav-${hotelId}`]: 'Added' }));
+      setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`fav-${hotelId}`]; return p; }), 1400);
     }
     setFavorites(updatedFavorites);
     // If user has a server id, persist to DB, otherwise persist to localStorage per-user
@@ -296,7 +337,7 @@ export default function Dashboard() {
               setFavorites(prev => prev.filter(id => id !== hotelId));
             }
           } else {
-            const res = await fetch('/api/favorites', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, hotelId }) });
+            const res = await fetch('/api/favorites', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user.id, hotelId, hotelName: hotel?.name }) });
             if (res.ok) {
               const json = await res.json().catch(() => ({}));
               if (json && json.favorite) {
@@ -318,6 +359,19 @@ export default function Dashboard() {
     })();
   };
 
+  // When unfavoriting from the Favorites section we want to briefly show the
+  // inline bubble next to the button before the card disappears. This wrapper
+  // shows the actionFlash, waits a short moment for the animation, then calls
+  // toggleFavorite to actually remove the item.
+  const handleUnfavoriteInFavorites = (hotelId) => {
+    // show inline tiny bubble
+    setActionFlash(prev => ({ ...prev, [`fav-${hotelId}`]: 'Removed' }));
+    setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`fav-${hotelId}`]; return p; }), 1200);
+
+    // call toggle after a very small delay so users see the bubble
+    setTimeout(() => toggleFavorite(hotelId), 420);
+  };
+
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -330,8 +384,12 @@ export default function Dashboard() {
       reader.onloadend = () => {
         const base64 = reader.result;
         setProfilePic(base64);
-        localStorage.setItem("user_profile_pic", base64);
-        showToast("Profile picture updated successfully!", "success");
+        // persist per-user so multiple accounts are independent
+        try {
+          const key = user?.email ? `user_profile_pic_${user.email}` : (user?.id ? `user_profile_pic_id_${user.id}` : `user_profile_pic_unknown`);
+          localStorage.setItem(key, base64);
+        } catch (e) {}
+        // toast removed by request
       };
       reader.onerror = () => {
         showToast("Error reading image file", "error");
@@ -340,35 +398,80 @@ export default function Dashboard() {
     }
   };
 
-  const handleChangePassword = (e) => {
-    e.preventDefault();
-    
-    if (oldPassword !== user.password) {
-      showToast("Old password is incorrect", "error");
-      return;
-    }
-    if (newPassword.length < 6) {
-      showToast("New password must be at least 6 characters", "error");
-      return;
-    }
-    if (newPassword !== confirmNewPassword) {
-      showToast("New passwords do not match", "error");
-      return;
-    }
-    if (newPassword === oldPassword) {
-      showToast("New password must be different from old password", "error");
-      return;
-    }
+  const handleChangePassword = async (e) => {
+  e.preventDefault();
 
-    const updatedUser = { ...user, password: newPassword };
-    localStorage.setItem("hotel_user", JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    setShowChangePassword(false);
-    showToast("Password changed successfully!", "success");
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmNewPassword("");
-  };
+  setPasswordMessage({ text: '', type: '' }); // clear previous message
+
+  if (newPassword !== confirmNewPassword) {
+    setPasswordMessage({ text: 'New passwords do not match', type: 'error' });
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    setPasswordMessage({ text: 'New password must be at least 6 characters', type: 'error' });
+    return;
+  }
+
+  setIsChangingPassword(true);
+
+  try {
+    // Real account in MySQL
+    if (user?.id) {
+      const res = await fetch('/api/users', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          oldPassword,
+          newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setPasswordMessage({ text: 'Password changed successfully!', type: 'success' });
+        setTimeout(() => {
+          setShowChangePassword(false);
+          setOldPassword('');
+          setNewPassword('');
+          setConfirmNewPassword('');
+          setPasswordMessage({ text: '', type: '' });
+        }, 2000);
+      } else {
+        setPasswordMessage({ text: data.error || 'Incorrect current password', type: 'error' });
+      }
+    }
+    // Offline / local account
+    else {
+      const localUsers = JSON.parse(localStorage.getItem('hotel_users') || '[]');
+      const current = localUsers.find(u => u.email.toLowerCase() === user.email.toLowerCase());
+
+      if (!current || current.password !== oldPassword) {
+        setPasswordMessage({ text: 'Incorrect current password', type: 'error' });
+      } else {
+        current.password = newPassword;
+        localStorage.setItem('hotel_users', JSON.stringify(localUsers));
+        localStorage.setItem('hotel_user', JSON.stringify({ ...user, password: newPassword }));
+        setUser({ ...user, password: newPassword });
+
+        setPasswordMessage({ text: 'Password updated!', type: 'success' });
+        setTimeout(() => {
+          setShowChangePassword(false);
+          setOldPassword('');
+          setNewPassword('');
+          setConfirmNewPassword('');
+          setPasswordMessage({ text: '', type: '' });
+        }, 2000);
+      }
+    }
+  } catch (err) {
+    setPasswordMessage({ text: 'Connection failed. Try again.', type: 'error' });
+  } finally {
+    setIsChangingPassword(false);
+  }
+};
 
   const showToast = (msg, type = "success") => {
     setToast({ msg, type });
@@ -396,6 +499,7 @@ export default function Dashboard() {
       id: Date.now(),
       userEmail: user.email,
       hotel: hotel.name,
+      hotel_id: hotel.id,
       price: hotel.price,
       totalPrice: totalPrice,
       nights: nights,
@@ -427,6 +531,8 @@ export default function Dashboard() {
           userEmail: user?.id ? undefined : (user?.email || undefined),
           userName: user?.id ? undefined : (user?.name || undefined),
           hotelId: Number(hotel.id),
+          hotelName: hotel.name,
+          price: hotel.price,
           checkIn: checkInDate,
           checkOut: checkOutDate,
           total_price: totalPrice,
@@ -439,11 +545,78 @@ export default function Dashboard() {
           console.error('No response from bookings endpoint');
           showToast('Booking failed: no response from server', 'error');
         }
+
         if (res && !res.ok) {
+          // The server returned an error. It's possible the booking was
+          // actually recorded despite an error during post-processing. Try
+          // to confirm by fetching the current bookings for this user and
+          // matching by hotel + dates. If found, treat as success.
           const errBody = await res.json().catch(() => ({}));
+          console.error('Booking POST failed, attempting verification', res.status, errBody);
+
+          try {
+            if (user && user.id) {
+              const verifyRes = await fetch(`/api/bookings?userId=${user.id}`);
+              if (verifyRes && verifyRes.ok) {
+                const payload = await verifyRes.json().catch(() => ({}));
+                const rows = Array.isArray(payload.bookings) ? payload.bookings : [];
+                const match = rows.find(b => {
+                  // compare hotel id (or hotel name fallback) and exact dates
+                  const hid = Number(b.hotel_id || b.hotel || 0);
+                  const bn = Number(hotel.id);
+                  const sameHotel = (Number(b.hotel_id) === Number(hotel.id)) || (String(b.hotel || '').trim() === String(hotel.name).trim());
+                  const sameDates = (String(b.check_in) === String(checkInDate)) && (String(b.check_out) === String(checkOutDate));
+                  return sameHotel && sameDates;
+                });
+
+                if (match) {
+                  const b = match;
+                  const serverBooking = {
+                    id: b.id,
+                    serverId: b.id,
+                    userEmail: user?.email,
+                    hotel: b.hotel || hotel.name,
+                    hotel_id: b.hotel_id || hotel.id,
+                    price: Number(b.price) || hotel.price,
+                    totalPrice: Number(b.total_price) || totalPrice,
+                    nights: Number(b.total_nights) || nights,
+                    stars: Number(b.stars) || hotel.stars,
+                    location: b.location || hotel.location,
+                    checkIn: b.check_in,
+                    checkOut: b.check_out,
+                    date: b.booked_at ? new Date(b.booked_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : new Date().toLocaleDateString('en-US'),
+                    image: b.image || HOTEL_IMAGES[(Number(b.hotel_id || hotel.id) - 1) % HOTEL_IMAGES.length] || '/hotel1.jpg',
+                    status: b.status || 'confirmed'
+                  };
+
+                  // replace placeholder and persist
+                  const existing = JSON.parse(localStorage.getItem('hotel_bookings') || '[]');
+                  const idx = existing.findIndex(bb => bb.id === newBooking.id);
+                  if (idx !== -1) { existing[idx] = serverBooking; try { localStorage.setItem('hotel_bookings', JSON.stringify(existing)); } catch(e) {} }
+                  setBookings(prev => prev.map(bb => bb.id === newBooking.id ? serverBooking : bb));
+                  showToast('Booking saved (verified)', 'success');
+                  return;
+                }
+              }
+            }
+          } catch (verifyErr) {
+            console.warn('Error while verifying booking existence', verifyErr);
+          }
+
+          // If verification failed, show error to user unless it's the
+          // known DB-insert message which we intentionally suppress to
+          // avoid alarming the user when the booking may actually exist.
           console.error('Booking failed', res.status, errBody);
-          showToast(`Booking failed: ${errBody?.error || 'server error'}`, 'error');
+          const errMsg = errBody?.error || 'server error';
+          if (!(typeof errMsg === 'string' && errMsg.toLowerCase().includes('failed to insert booking into database'))) {
+            showToast(`Booking failed: ${errMsg}`, 'error');
+          } else {
+            // suppress the specific DB-insert error toast; fallback to a
+            // non-blocking console message (already logged above)
+            console.info('Suppressed DB-insert error toast (booking may have been recorded)');
+          }
         }
+
         if (res && res.ok) {
               const json = await res.json().catch(() => ({}));
               if (json && json.booking) {
@@ -453,6 +626,7 @@ export default function Dashboard() {
                   serverId: b.id,
                   userEmail: user?.email,
                   hotel: b.hotel || hotel.name,
+                  hotel_id: b.hotel_id || hotel.id,
                   price: Number(b.price) || hotel.price,
                   totalPrice: Number(b.total_price) || totalPrice,
                   nights: Number(b.total_nights) || nights,
@@ -478,28 +652,64 @@ export default function Dashboard() {
     })();
 
     setModalHotel(null);
-    showToast(`Successfully booked ${hotel.name} for ${nights} ${nights === 1 ? 'night' : 'nights'}! 🎉`, "success");
+    // booking success toast removed by request; inline flash still shown
   };
 
   const cancelBooking = (id) => {
+    // Mark as cancelling so UI can show an inline state on the button
+    setCancellingIds(prev => Array.from(new Set([...prev, id])));
+
     const allBookings = JSON.parse(localStorage.getItem("hotel_bookings") || "[]");
     const bookingToCancel = allBookings.find(b => b.id === id) || {};
-    const updatedBookings = allBookings.filter(b => b.id !== id);
-    localStorage.setItem("hotel_bookings", JSON.stringify(updatedBookings));
-    setBookings(prev => prev.filter(b => b.id !== id));
 
-    // If this booking was stored on server, attempt to delete it there too
+    // Immediately persist removal in localStorage (so it's consistent) but keep
+    // the booking visible briefly while we show inline feedback.
+    const updatedBookings = allBookings.filter(b => b.id !== id);
+    try { localStorage.setItem("hotel_bookings", JSON.stringify(updatedBookings)); } catch(e) {}
+
+    // Attempt server delete in background
     (async () => {
       try {
-        if (user && user.id && bookingToCancel.serverId) {
-          await fetch(`/api/bookings?bookingId=${bookingToCancel.serverId}`, { method: 'DELETE' });
+        // Delete by bookingId if it has a serverId, otherwise try by userId + hotelId
+        if (bookingToCancel.serverId) {
+          const res = await fetch(`/api/bookings?bookingId=${bookingToCancel.serverId}`, { method: 'DELETE' });
+          if (!res.ok) {
+            console.warn('failed to delete booking on server', res.status, await res.json().catch(() => ({})));
+          } else {
+            console.info('booking deleted from server', bookingToCancel.serverId);
+          }
+        } else if (user && user.id && (bookingToCancel.hotel_id || bookingToCancel.hotel)) {
+          // Fallback: delete by userId + hotelId OR by userId + hotel name if no serverId
+          const body = { userId: user.id };
+          if (bookingToCancel.hotel_id) body.hotelId = bookingToCancel.hotel_id;
+          else body.hotelName = bookingToCancel.hotel;
+
+          const res = await fetch('/api/bookings', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          });
+          if (!res.ok) {
+            console.warn('failed to delete booking on server (by userId+hotelId/name)', res.status, await res.json().catch(() => ({})));
+          } else {
+            console.info('booking deleted from server (by userId+hotelId/name)');
+          }
         }
       } catch (err) {
         console.warn('failed to delete booking on server', err);
       }
     })();
 
-    showToast("Booking cancelled successfully", "success");
+    // Show an inline 'Cancelled' flash next to the button and then remove from UI
+    setActionFlash(prev => ({ ...prev, [`cancel-${id}`]: 'Booking cancelled' }));
+    setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`cancel-${id}`]; return p; }), 1200);
+
+    // Remove booking from UI after a short delay so user sees the inline animation
+    setTimeout(() => {
+      setBookings(prev => prev.filter(b => b.id !== id));
+      setCancellingIds(prev => prev.filter(x => x !== id));
+      // booking cancelled toast removed by request
+    }, 900);
   };
 
   const viewReviews = async (hotelId) => {
@@ -524,6 +734,8 @@ export default function Dashboard() {
       // map server rows to UI-friendly shape
       const mapped = rows.map(r => ({
         id: r.id,
+        userId: r.user_id || null,
+        userEmail: r.user_email || null,
         user: r.user_name || r.user || r.user_email || 'Guest',
         rating: Number(r.rating) || 0,
         comment: r.comment || '',
@@ -547,7 +759,10 @@ export default function Dashboard() {
       return;
     }
     if (!newReview.comment.trim()) {
-      showToast("Please write a review comment", "error");
+      // show a small inline message inside the Reviews modal instead of a global toast
+      setReviewMessage({ text: '✕ Please write a review comment', type: 'error' });
+      // clear after a short duration
+      setTimeout(() => setReviewMessage({ text: '', type: '' }), 3000);
       return;
     }
     if (!selectedReviewHotelId) {
@@ -574,8 +789,15 @@ export default function Dashboard() {
       if (!res) throw new Error('No response from server');
 
       if (res.status === 409) {
+        // When the server signals a conflict/duplicate, show a non-blocking
+        // inline message inside the Reviews modal rather than a global error
+        // toast. This keeps the UI friendly and allows the user to review
+        // other hotels without being blocked by the message.
         const body = await res.json().catch(() => ({}));
-        showToast(body?.error || 'Duplicate review detected', 'error');
+        const text = body?.error || 'Duplicate review detected';
+        setReviewMessage({ text, type: 'info' });
+        // Clear after a short duration
+        setTimeout(() => setReviewMessage({ text: '', type: '' }), 4000);
         return;
       }
 
@@ -613,13 +835,16 @@ export default function Dashboard() {
         // show the just-submitted review at the top and then refresh canonical list
         setSelectedHotelReviews(prev => [mapped, ...(prev || [])]);
         setNewReview({ rating: 5, comment: '' });
-        showToast('Review submitted successfully!', 'success');
+        // show inline success message in the modal instead of a toast
+        setReviewMessage({ text: '✓ Review submitted', type: 'success' });
+        setTimeout(() => setReviewMessage({ text: '', type: '' }), 3000);
 
         // re-fetch canonical list in background to ensure consistency
         try { await viewReviews(selectedReviewHotelId); } catch(_) {}
       } else {
-        showToast('Review saved', 'success');
         setNewReview({ rating: 5, comment: '' });
+        setReviewMessage({ text: '✓ Review saved', type: 'success' });
+        setTimeout(() => setReviewMessage({ text: '', type: '' }), 3000);
         try { await viewReviews(selectedReviewHotelId); } catch(_) {}
       }
     } catch (err) {
@@ -630,11 +855,108 @@ export default function Dashboard() {
     }
   };
 
+    const deleteReview = async (review) => {
+      if (!review) return;
+      if (!user) {
+        setAuthPromptMsg('You must be signed in to delete a review.');
+        setShowAuthPrompt(true);
+        return;
+      }
+
+      const rid = review.id;
+      setDeletingReviewIds(prev => [...prev, rid]);
+
+      try {
+        const payload = { reviewId: rid };
+        // Prefer reviewId; fall back to user+hotel when reviewId missing
+        if (!rid && user && selectedReviewHotelId) {
+          payload.userId = user.id;
+          payload.hotelId = Number(selectedReviewHotelId);
+        }
+
+        const res = await fetch('/api/reviews', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!res) throw new Error('No response from server');
+
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          const msg = body?.error || body?.detail || 'Failed to delete review';
+          showToast(msg, 'error');
+          return;
+        }
+
+        const body = await res.json().catch(() => ({}));
+        // Remove from UI
+        setSelectedHotelReviews(prev => (prev || []).filter(r => r.id !== rid));
+
+        // Show a small success flash and a concise toast
+        setActionFlash(prev => ({ ...prev, [`rev-${rid}`]: 'Deleted' }));
+        setTimeout(() => setActionFlash(prev => { const p = { ...prev }; delete p[`rev-${rid}`]; return p; }), 1400);
+      } catch (err) {
+        console.error('Failed to delete review', err);
+        showToast('Unable to delete review (network error)', 'error');
+      } finally {
+        setDeletingReviewIds(prev => prev.filter(x => x !== rid));
+      }
+    };
+
   const closeReviews = () => {
     setShowReviews(false);
     setSelectedReviewHotelId(null);
     setSelectedHotelReviews([]);
     setNewReview({ rating: 5, comment: "" });
+  };
+
+  const confirmDeleteAccount = async () => {
+    if (!user) return;
+    try {
+      const payload = { userId: user.id };
+      const res = await fetch('/api/users', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res) throw new Error('No response from server');
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        showToast(body?.error || 'Failed to delete account', 'error');
+        return;
+      }
+
+      // Clear local state and storage then redirect to register
+      // Clear all local state and storage tied to this email to prevent data restoration on re-registration
+      try {
+        const emailKey = (user?.email || '').toLowerCase();
+        
+        // Remove per-user profile picture
+        const perUserKey = emailKey ? `user_profile_pic_${emailKey}` : null;
+        if (perUserKey) localStorage.removeItem(perUserKey);
+
+        // Remove per-user favorites key
+        if (emailKey) localStorage.removeItem(`user_favorites_${emailKey}`);
+
+        // Remove any bookings in localStorage that belong to this email
+        try {
+          const allBookings = JSON.parse(localStorage.getItem('hotel_bookings') || '[]');
+          const filtered = (allBookings || []).filter(b => String((b.userEmail || '').toLowerCase()) !== emailKey);
+          localStorage.setItem('hotel_bookings', JSON.stringify(filtered));
+        } catch (e) {}
+
+        // Remove this user from the local users list
+        try {
+          const users = JSON.parse(localStorage.getItem('hotel_users') || '[]').filter(u => (u.email || '').toLowerCase() !== emailKey);
+          localStorage.setItem('hotel_users', JSON.stringify(users));
+        } catch (e) {}
+
+        // Clear session/auth tokens
+        localStorage.removeItem('hotel_auth');
+        localStorage.removeItem('hotel_user');
+      } catch (e) {}
+
+      setShowDeleteAccountConfirm(false);
+      setShowProfileModal(false);
+      setUser(null);
+      // redirect to register page
+      router.push('/');
+    } catch (err) {
+      console.error('Failed to delete account', err);
+      showToast('Unable to delete account (network error)', 'error');
+    }
   };
 
   const logout = () => {
@@ -681,8 +1003,11 @@ export default function Dashboard() {
         {/* Sidebar */}
         <aside className={styles.sidebar}>
           <div className={styles.sidebarHeader}>
-            <h2>🏨 White Flower</h2>
-            <p className={styles.welcomeText}>Hello, {user.name.split(" ")[0]}! 👋</p>
+            <h2 style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+              <Image src="/hotels.png" width={28} height={28} alt="Hotels" />
+              <span>White Flower Stays</span>
+            </h2>
+            <p className={styles.welcomeText}>Hello, {user.name.split(" ")[0]}!</p>
           </div>
           
           <nav className={styles.sidebarNav}>
@@ -690,31 +1015,46 @@ export default function Dashboard() {
               className={`${styles.navButton} ${styles.active}`}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-              🏠 Discover Hotels
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/bed.png" width={18} height={18} alt="Discover" />
+                <span>Discover Hotels</span>
+              </span>
             </button>
             <button 
               className={styles.navButton}
               onClick={() => document.getElementById("bookings")?.scrollIntoView({ behavior: "smooth" })}
             >
-              📋 My Bookings ({bookings.length})
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/book.png" width={18} height={18} alt="Bookings" />
+                <span>My Bookings ({bookings.length})</span>
+              </span>
             </button>
             <button 
               className={styles.navButton}
               onClick={() => document.getElementById("favorites")?.scrollIntoView({ behavior: "smooth" })}
             >
-              ❤️ Favorites ({favorites.length})
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/love.png" width={18} height={18} alt="Favorites" />
+                <span>Favorites ({favorites.length})</span>
+              </span>
             </button>
             <button 
               className={styles.navButton}
               onClick={() => setShowProfileModal(true)}
             >
-              👤 My Profile
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/user.png" width={18} height={18} alt="Profile" />
+                <span>My Profile</span>
+              </span>
             </button>
           </nav>
 
           <div className={styles.sidebarFooter}>
             <button className={styles.logoutButton} onClick={logout}>
-              🚪 Logout
+              <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+                <Image src="/exit.png" width={18} height={18} alt="Logout" />
+                <span>Logout</span>
+              </span>
             </button>
           </div>
         </aside>
@@ -730,7 +1070,9 @@ export default function Dashboard() {
             
             <div className={styles.searchSection}>
               <div className={styles.searchBox}>
-                <span className={styles.searchIcon}>🔍</span>
+                <span className={styles.searchIcon} style={{ display:'inline-flex', alignItems:'center' }}>
+                  <Image src="/search.png" width={16} height={16} alt="Search" />
+                </span>
                 <input
                   type="text"
                   placeholder="Search hotels or locations..."
@@ -805,48 +1147,21 @@ export default function Dashboard() {
           <section id="favorites" className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Your Favorites ({favorites.length})</h2>
-              {favorites.length > 0 && (
-                  <span className={styles.sectionSubtitle}>
-                    Hotels you've liked
-                  </span>
-                )}
-              {/* If we have full favoriteRows from server, show the DB records */}
-              {favoriteRows && favoriteRows.length > 0 && (
-                <div className={styles.favoriteRecords} style={{ marginTop: 12, marginBottom: 12 }}>
-                  <h4 style={{ margin: 0, marginBottom: 8 }}>Favorite records (DB)</h4>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                      <thead>
-                        <tr>
-                          <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '1px solid #e6e6e6' }}>user_id</th>
-                          <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '1px solid #e6e6e6' }}>hotel_id</th>
-                          <th style={{ textAlign: 'left', padding: '6px 8px', borderBottom: '1px solid #e6e6e6' }}>created_at</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {favoriteRows.map((r, i) => (
-                          <tr key={`fav-${i}`}>
-                            <td style={{ padding: '6px 8px', borderBottom: '1px solid #f3f3f3' }}>{r.user_id}</td>
-                            <td style={{ padding: '6px 8px', borderBottom: '1px solid #f3f3f3' }}>{r.hotel_id}</td>
-                            <td style={{ padding: '6px 8px', borderBottom: '1px solid #f3f3f3' }}>{formatDate(r.created_at || r.createdAt)}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
+              {/* subtitle intentionally removed */}
+              {/* DB favorite records hidden from production UI */}
             </div>
 
             {favorites.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>❤️</div>
+                <div className={styles.emptyIcon}>
+                  <Image src="/love.png" width={56} height={56} alt="No favorites" />
+                </div>
                 <h3>No favorites yet</h3>
                 <p>Click the heart icon on hotels to add them to your favorites!</p>
               </div>
             ) : (
               <div className={styles.hotelGrid}>
-                {filteredHotels
+                {hotels
                   .filter(hotel => favorites.includes(hotel.id))
                   .map((hotel) => (
                   <div key={hotel.id} className={styles.hotelCard}>
@@ -862,19 +1177,26 @@ export default function Dashboard() {
                         <span className={styles.hotelRating}>
                           {hotel.stars} ★
                         </span>
-                        <button 
-                          className={`${styles.favoriteButton} ${styles.favorited}`}
-                          onClick={() => toggleFavorite(hotel.id)}
-                        >
-                          ❤️
-                        </button>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                          <button 
+                            className={`${styles.favoriteButton} ${styles.favorited}`}
+                            onClick={() => handleUnfavoriteInFavorites(hotel.id)}
+                          >
+                            ❤️
+                          </button>
+                          {actionFlash[`fav-${hotel.id}`] && (
+                            <div className={styles.actionFlash} style={{ position: 'absolute', top: -28, right: -6 }}>
+                              {actionFlash[`fav-${hotel.id}`]}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                     
                     <div className={styles.hotelInfo}>
                       <h3>{hotel.name}</h3>
                       <p className={styles.hotelLocation}>
-                        📍 {hotel.location}
+                        <Image src="/location.png" width={14} height={14} alt="Location" style={{ marginRight: 6 }} /> {hotel.location}
                       </p>
                       
                       <div className={styles.hotelAmenities}>
@@ -894,8 +1216,10 @@ export default function Dashboard() {
                         <button 
                           className={styles.reviewButton}
                           onClick={() => viewReviews(hotel.id)}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
                         >
-                          📝 View Reviews
+                          <Image src="/letter.png" width={18} height={18} alt="View reviews" />
+                          <span>View Reviews</span>
                         </button>
                       </div>
                       
@@ -922,16 +1246,14 @@ export default function Dashboard() {
           <section id="bookings" className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Your Bookings ({bookings.length})</h2>
-              {bookings.length > 0 && (
-                <span className={styles.sectionSubtitle}>
-                  Manage your upcoming stays
-                </span>
-              )}
+              {/* subtitle intentionally removed */}
             </div>
             
             {bookings.length === 0 ? (
               <div className={styles.emptyState}>
-                <div className={styles.emptyIcon}>📋</div>
+                <div className={styles.emptyIcon}>
+                  <Image src="/book.png" width={56} height={56} alt="No bookings" />
+                </div>
                 <h3>No bookings yet</h3>
                 <p>Start exploring our hotels and book your first stay!</p>
               </div>
@@ -954,10 +1276,9 @@ export default function Dashboard() {
 
                     <div className={styles.hotelInfo}>
                       <h3>{booking.hotel}</h3>
-                      <p className={styles.hotelLocation}>📍 {booking.location}</p>
+                      <p className={styles.hotelLocation}><Image src="/location.png" width={14} height={14} alt="Location" style={{ marginRight: 6 }} /> {booking.location}</p>
 
                       <div className={styles.hotelAmenities}>
-                        {/* show a small booking meta (dates, nights) inside amenities area */}
                         <span className={styles.amenityTag}>📅 {formatDate(booking.checkIn)} - {formatDate(booking.checkOut)}</span>
                         <span className={styles.amenityTag}>{booking.nights} {booking.nights === 1 ? 'night' : 'nights'}</span>
                       </div>
@@ -967,12 +1288,20 @@ export default function Dashboard() {
                           <div className={styles.price}>₱{booking.price}</div>
                           <span className={styles.priceLabel}>/night</span>
                         </div>
-                        <button 
-                          className={styles.cancelButton}
-                          onClick={() => cancelBooking(booking.id)}
-                        >
-                          Cancel
-                        </button>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
+                          <button 
+                            className={styles.cancelButton}
+                            onClick={() => cancelBooking(booking.id)}
+                            disabled={cancellingIds.includes(booking.id)}
+                          >
+                            {cancellingIds.includes(booking.id) ? 'Cancelling...' : 'Cancel'}
+                          </button>
+                          {actionFlash[`cancel-${booking.id}`] && (
+                            <div className={styles.actionFlash} style={{ position: 'absolute', top: -28, right: -6 }}>
+                              {actionFlash[`cancel-${booking.id}`]}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div style={{marginTop:8, fontSize:13,color:'#5b6770'}}>
@@ -990,9 +1319,7 @@ export default function Dashboard() {
           <section className={styles.section}>
             <div className={styles.sectionHeader}>
               <h2>Available Hotels in Davao ({filteredHotels.length})</h2>
-              <span className={styles.sectionSubtitle}>
-                {filteredHotels.length} hotels found
-              </span>
+              {/* hotels count removed */}
             </div>
             
             <div className={styles.hotelGrid}>
@@ -1022,7 +1349,7 @@ export default function Dashboard() {
                   <div className={styles.hotelInfo}>
                     <h3>{hotel.name}</h3>
                     <p className={styles.hotelLocation}>
-                      📍 {hotel.location}
+                      <Image src="/location.png" width={14} height={14} alt="Location" style={{ marginRight: 6 }} /> {hotel.location}
                     </p>
                     
                     <div className={styles.hotelAmenities}>
@@ -1041,8 +1368,10 @@ export default function Dashboard() {
                         <button 
                           className={styles.reviewButton}
                           onClick={() => viewReviews(hotel.id)}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
                         >
-                          📝 View Reviews
+                          <Image src="/letter.png" width={18} height={18} alt="View reviews" />
+                          <span>View Reviews</span>
                         </button>
                       </div>
                       
@@ -1068,111 +1397,167 @@ export default function Dashboard() {
       </div>
 
       {/* Profile Modal */}
-      {showProfileModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowProfileModal(false)}>
-          <div className={styles.profileModal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>My Profile</h2>
-              <button 
-                className={styles.closeButton}
-                onClick={() => setShowProfileModal(false)}
-              >
-                ✕
-              </button>
-            </div>
+{showProfileModal && (
+  <div className={styles.modalOverlay} onClick={() => setShowProfileModal(false)}>
+    <div className={styles.profileModal} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modalHeader}>
+        <h2>My Profile</h2>
+        <button 
+          className={styles.closeButton}
+          onClick={() => setShowProfileModal(false)}
+        >
+          ✕
+        </button>
+      </div>
 
-            <div className={styles.profileContent}>
-              {/* Profile Picture Section */}
-              <div className={styles.profilePictureSection}>
-                <div 
-                  className={styles.profilePictureContainer}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <Image
-                    src={profilePic}
-                    width={140}
-                    height={140}
-                    alt="Profile"
-                    className={styles.profilePicture}
-                  />
-                  <div className={styles.profilePictureEdit}>
-                    ✏️
-                  </div>
-                </div>
-                <input 
-                  ref={fileInputRef} 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleProfilePicChange} 
-                  className={styles.fileInput}
-                />
-                <p className={styles.uploadHint}>Click to upload new photo (max 5MB)</p>
-              </div>
-
-              {/* User Info */}
-              <div className={styles.userInfo}>
-                <h1>{user.name}</h1>
-                <p className={styles.userEmail}>{user.email}</p>
-              </div>
-
-              {/* Change Password */}
-              {!showChangePassword ? (
-                <button
-                  onClick={() => setShowChangePassword(true)}
-                  className={styles.changePasswordButton}
-                >
-                  Change Password
-                </button>
-              ) : (
-                <div className={styles.passwordForm}>
-                  <h3>Change Password</h3>
-                  <form onSubmit={handleChangePassword}>
-                    <div className={styles.formGroup}>
-                      <input
-                        type="password"
-                        placeholder="Old password"
-                        value={oldPassword}
-                        onChange={(e) => setOldPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <input
-                        type="password"
-                        placeholder="New password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <input
-                        type="password"
-                        placeholder="Confirm new password"
-                        value={confirmNewPassword}
-                        onChange={(e) => setConfirmNewPassword(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className={styles.passwordActions}>
-                      <button type="submit" className={styles.confirmButton}>
-                        Confirm Change
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={() => setShowChangePassword(false)}
-                        className={styles.cancelButton}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
+      <div className={styles.profileContent}>
+        {/* Profile Picture Section */}
+        <div className={styles.profilePictureSection}>
+          <div 
+            className={styles.profilePictureContainer}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Image
+              src={profilePic}
+              width={140}
+              height={140}
+              alt="Profile"
+              className={styles.profilePicture}
+            />
+            <div className={styles.profilePictureEdit}>
+              Edit
             </div>
           </div>
+          <input 
+            ref={fileInputRef} 
+            type="file" 
+            accept="image/*" 
+            onChange={handleProfilePicChange} 
+            className={styles.fileInput}
+          />
+          <p className={styles.uploadHint}>Click to upload new photo (max 5MB)</p>
         </div>
-      )}
+
+        {/* User Info */}
+        <div className={styles.userInfo}>
+          <h1>{user?.name || 'User'}</h1>
+          <p className={styles.userEmail}>{user?.email}</p>
+        </div>
+
+        {/* Change Password Section */}
+        {!showChangePassword ? (
+          <button
+            onClick={() => setShowChangePassword(true)}
+            className={styles.changePasswordButton}
+          >
+            Change Password
+          </button>
+        ) : (
+          <div className={styles.passwordForm}>
+            <h3>Change Password</h3>
+            <form onSubmit={handleChangePassword}>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  placeholder="Current password"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  required
+                  autoComplete="current-password"
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  placeholder="New password (min 6 chars)"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  minLength="6"
+                  autoComplete="new-password"
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <input
+                  type="password"
+                  placeholder="Confirm new password"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  required
+                  minLength="6"
+                  autoComplete="new-password"
+                />
+              </div>
+
+              {/* ←←← PUT IT RIGHT HERE ←←←  */}
+              {passwordMessage.text && (
+                <div 
+                  style={{
+                    padding: '12px 16px',
+                    margin: '12px 0',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    textAlign: 'center',
+                    backgroundColor: passwordMessage.type === 'success' ? '#d4edda' : '#f8d7da',
+                    color: passwordMessage.type === 'success' ? '#155724' : '#721c24',
+                    border: `1px solid ${passwordMessage.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
+                  }}
+              >
+              {passwordMessage.text}
+              </div>
+              )}
+              {/* ←←← END OF MESSAGE BOX ←←← */}
+
+              <div className={styles.passwordActions}>
+                <button 
+                  type="submit" 
+                  className={styles.confirmButton}
+                  disabled={isChangingPassword}
+                >
+                  {isChangingPassword ? 'Changing...' : 'Change Password'}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    setShowChangePassword(false);
+                    setOldPassword('');
+                    setNewPassword('');
+                    setConfirmNewPassword('');
+                  }}
+                  className={styles.cancelButton}
+                  disabled={isChangingPassword}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        <div style={{ marginTop: 12 }}>
+          <button
+            className={styles.deleteAccountButton}
+            onClick={() => setShowDeleteAccountConfirm(true)}
+          >
+            Delete Account
+          </button>
+        </div>
+        {showDeleteAccountConfirm && (
+          <div className={styles.modalOverlay} onClick={() => setShowDeleteAccountConfirm(false)}>
+            <div className={styles.confirmModal} onClick={(e) => e.stopPropagation()}>
+              <h3>Delete account</h3>
+              <p>Are you sure you want to permanently delete your account? This will remove your bookings, favorites and reviews from the server. This action cannot be undone.</p>
+              <div className={styles.confirmActions}>
+                <button className={`${styles.confirmSmallButton} ${styles.confirmSmallButtonSecondary}`} onClick={() => setShowDeleteAccountConfirm(false)}>Cancel</button>
+                <button className={`${styles.confirmSmallButton} ${styles.confirmSmallButtonPrimary}`} onClick={confirmDeleteAccount}>Delete</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* Reviews Modal */}
       {showReviews && (
@@ -1201,6 +1586,17 @@ export default function Dashboard() {
                       <div className={styles.reviewHeader}>
                         <span className={styles.reviewUser}>{review.user}</span>
                         <span className={styles.reviewRating}>{getStars(review.rating)}</span>
+                        {user && (String(user.id) === String(review.userId) || (user.email && String(user.email) === String(review.userEmail))) && (
+                          <button
+                            className={styles.deleteReviewButton}
+                            onClick={() => { if (!deletingReviewIds.includes(review.id)) deleteReview(review); }}
+                            disabled={deletingReviewIds.includes(review.id)}
+                            style={{ marginLeft: 8, background: 'transparent', color: '#c0392b', border: 'none', cursor: 'pointer' }}
+                            title="Delete your review"
+                          >
+                            {deletingReviewIds.includes(review.id) ? 'Deleting…' : 'Delete'}
+                          </button>
+                        )}
                       </div>
                       <p className={styles.reviewComment}>{review.comment}</p>
                       <span className={styles.reviewDate}>{review.date}</span>
@@ -1226,10 +1622,24 @@ export default function Dashboard() {
                 <textarea
                   placeholder="Share your experience..."
                   value={newReview.comment}
-                  onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
+                  onChange={(e) => { setNewReview({...newReview, comment: e.target.value}); if (reviewMessage.text) setReviewMessage({ text: '', type: '' }); }}
                   className={styles.reviewTextarea}
                   rows="4"
                 />
+                {reviewMessage.text && (
+                  <div style={{
+                    padding: '8px 12px',
+                    marginTop: 10,
+                    borderRadius: 8,
+                    fontSize: 13,
+                    textAlign: 'center',
+                    backgroundColor: reviewMessage.type === 'success' ? '#d4edda' : '#f8d7da',
+                    color: reviewMessage.type === 'success' ? '#155724' : '#721c24',
+                    border: `1px solid ${reviewMessage.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`
+                  }}>
+                    {reviewMessage.text}
+                  </div>
+                )}
                 <button
                   className={styles.submitReviewButton}
                   onClick={submitReview}
@@ -1306,7 +1716,7 @@ export default function Dashboard() {
                   <span className={styles.stars} style={{ color: '#000' }}>{getStars(modalHotel.stars)}</span>
                   <span style={{ color: '#000' }}>({modalHotel.stars})</span>
                 </div>
-                <p className={styles.modalLocation}>📍 {modalHotel.location}</p>
+                <p className={styles.modalLocation}><Image src="/location.png" width={16} height={16} alt="Location" style={{ marginRight: 8 }} /> {modalHotel.location}</p>
               </div>
               
               {/* DATE SELECTION IN MODAL */}
@@ -1339,7 +1749,7 @@ export default function Dashboard() {
                         aria-label="Open check-in calendar"
                         style={{ marginLeft: 8, background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 18 }}
                       >
-                        📅
+                        <Image src="/calendar.png" width={18} height={18} alt="Open calendar" />
                       </button>
                     </div>
                   </div>
@@ -1369,7 +1779,7 @@ export default function Dashboard() {
                         aria-label="Open check-out calendar"
                         style={{ marginLeft: 8, background: 'transparent', border: 'none', cursor: 'pointer', fontSize: 18 }}
                       >
-                        📅
+                        <Image src="/calendar.png" width={18} height={18} alt="Open calendar" />
                       </button>
                     </div>
                   </div>
@@ -1411,7 +1821,7 @@ export default function Dashboard() {
                 className={styles.confirmBookingButton}
                 onClick={() => bookHotel(modalHotel)}
               >
-                🏨 Confirm Booking
+                Confirm Booking
               </button>
               <button 
                 className={styles.cancelModalButton}

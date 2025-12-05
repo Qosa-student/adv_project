@@ -15,15 +15,26 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { userId, hotelId } = req.body;
+      const { userId, hotelId, hotelName } = req.body;
       if (!userId || !hotelId) return res.status(400).json({ error: 'userId and hotelId required' });
       try {
-        const insertSql = 'INSERT INTO favorites (user_id, hotel_id) VALUES (?, ?)';
-        const [result] = await db.query(insertSql, [userId, hotelId]);
+        // If hotelName not provided, attempt to fetch from hotels table
+        let name = hotelName;
+        if (!name) {
+          try {
+            const [hotel] = await db.query('SELECT name FROM hotels WHERE id = ? LIMIT 1', [hotelId]);
+            if (Array.isArray(hotel) && hotel.length) name = hotel[0].name;
+          } catch (e) {
+            console.warn('[favorites] failed to fetch hotel name', e);
+          }
+        }
+        
+        const insertSql = 'INSERT INTO favorites (user_id, hotel_id, hotel_name) VALUES (?, ?, ?)';
+        const [result] = await db.query(insertSql, [userId, hotelId, name || '']);
 
         // fetch and return the inserted row
         const [rows] = await db.query(
-          'SELECT user_id, hotel_id, created_at, created_at AS createdAt FROM favorites WHERE user_id = ? AND hotel_id = ? LIMIT 1',
+          'SELECT user_id, hotel_id, hotel_name, created_at, created_at AS createdAt FROM favorites WHERE user_id = ? AND hotel_id = ? LIMIT 1',
           [userId, hotelId]
         );
         const favorite = rows && rows[0] ? rows[0] : { user_id: Number(userId), hotel_id: Number(hotelId) };
@@ -33,10 +44,10 @@ export default async function handler(req, res) {
           // existing row -> return it
           try {
             const [rows] = await db.query(
-              'SELECT user_id, hotel_id, created_at, created_at AS createdAt FROM favorites WHERE user_id = ? AND hotel_id = ? LIMIT 1',
+              'SELECT user_id, hotel_id, hotel_name, created_at, created_at AS createdAt FROM favorites WHERE user_id = ? AND hotel_id = ? LIMIT 1',
               [userId, hotelId]
             );
-            const favorite = rows && rows[0] ? rows[0] : { user_id: Number(userId), hotel_id: Number(hotelId) };
+            const favorite = rows && rows[0] ? rows[0] : { user_id: Number(userId), hotel_id: Number(hotelId), hotel_name: hotelName || '' };
             return res.status(200).json({ favorite });
           } catch (e2) {
             console.error(e2);
@@ -54,7 +65,7 @@ export default async function handler(req, res) {
       if (!userId || !hotelId) return res.status(400).json({ error: 'userId and hotelId required' });
       try {
         const [rows] = await db.query(
-          'SELECT user_id, hotel_id, created_at, created_at AS createdAt FROM favorites WHERE user_id = ? AND hotel_id = ? LIMIT 1',
+          'SELECT user_id, hotel_id, hotel_name, created_at, created_at AS createdAt FROM favorites WHERE user_id = ? AND hotel_id = ? LIMIT 1',
           [userId, hotelId]
         );
         await db.query('DELETE FROM favorites WHERE user_id = ? AND hotel_id = ?', [userId, hotelId]);

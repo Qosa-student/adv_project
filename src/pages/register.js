@@ -1,5 +1,6 @@
 // pages/register.js - IMPROVED
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import styles from "@/styles/Home.module.css";
@@ -139,6 +140,8 @@ export default function Register() {
       localStorage.setItem('hotel_users', JSON.stringify(filtered));
       localStorage.setItem('hotel_user', JSON.stringify(newUser));
       localStorage.setItem('hotel_auth', 'true');
+      // initialize per-user default avatar so each account gets its own default
+      try { localStorage.setItem(`user_profile_pic_${emailLower}`, '/default-avatar.avif'); } catch (e) {}
 
       // Show centered modal for success, then redirect after a short delay
       setModalType('success');
@@ -169,6 +172,7 @@ export default function Register() {
         localStorage.setItem('hotel_users', JSON.stringify(existingUsers));
         localStorage.setItem('hotel_user', JSON.stringify(newUser));
         localStorage.setItem('hotel_auth', 'true');
+        try { localStorage.setItem(`user_profile_pic_${emailLower}`, '/default-avatar.avif'); } catch (e) {}
 
         setModalType('success');
         setModalMessage('Signup saved locally (offline). Redirecting to dashboard...');
@@ -258,8 +262,9 @@ export default function Register() {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? "🙈" : "👁️"}
+                  <Image src={showPassword ? '/visible.png' : '/invisible.png'} width={20} height={20} alt={showPassword ? 'Visible' : 'Hidden'} />
                 </button>
               </div>
               {errors.password && <span className={styles.errorText}>{errors.password}</span>}
@@ -298,8 +303,9 @@ export default function Register() {
                   type="button"
                   className={styles.passwordToggle}
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showConfirmPassword ? "🙈" : "👁️"}
+                  <Image src={showConfirmPassword ? '/visible.png' : '/invisible.png'} width={20} height={20} alt={showConfirmPassword ? 'Visible' : 'Hidden'} />
                 </button>
               </div>
               {errors.confirm && <span className={styles.errorText}>{errors.confirm}</span>}
@@ -329,19 +335,6 @@ export default function Register() {
               >
                 Already have an account? Login
               </button>
-            </div>
-
-            <div className={styles.authFooter}>
-              <p>
-                Already created an account? {" "}
-                <button 
-                  type="button" 
-                  onClick={() => router.push("/login")}
-                  className={styles.linkButton}
-                >
-                  Sign in here
-                </button>
-              </p>
             </div>
           </form>
         </div>

@@ -12,6 +12,7 @@ export default async function handler(req, res) {
         // Fetch reviews for a hotel with user info
         const [rows] = await db.query(
           `SELECT r.id, r.user_id, r.hotel_id, r.rating, r.comment, r.review_date, r.created_at,
+                  r.user_name AS reviewer_name, r.hotel_name,
                   u.name AS user_name, u.email AS user_email
             FROM reviews r
             JOIN users u ON u.id = r.user_id
@@ -118,16 +119,44 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Failed to validate hotelId', detail: e?.message || String(e) });
       }
 
+      // NOTE: We intentionally do NOT block creation of multiple reviews by
+      // the same user. Historically there was an application-level check that
+      // returned 409 for any existing review and prevented users from leaving
+      // reviews on other hotels. To allow a user to review many hotels, and
+      // to keep the server logic simple, skip a pre-check here and let the
+      // INSERT happen. If the database enforces a uniqueness constraint that
+      // prevents the insert, we'll surface a clear error back to the client.
+
       // Try insert; if the DB enforces uniqueness (user+hotel) the insert will
       // fail with ER_DUP_ENTRY. We do NOT want to overwrite historical reviews
       // silently, so return 409 Conflict with a helpful message instead.
-      const insertSql = 'INSERT INTO reviews (user_id, hotel_id, rating, comment) VALUES (?, ?, ?, ?)';
+      // Resolve reviewer name and hotel name to store snapshot values on insert
+      let reviewerName = userName;
       try {
-        const [result] = await db.query(insertSql, [userId, hotelId, rating, comment]);
+        if (!reviewerName) {
+          const [urows] = await db.query('SELECT name FROM users WHERE id = ? LIMIT 1', [userId]);
+          if (Array.isArray(urows) && urows.length) reviewerName = urows[0].name;
+        }
+      } catch (e) {
+        reviewerName = reviewerName || null;
+      }
+
+      let resolvedHotelName = null;
+      try {
+        const [hrows] = await db.query('SELECT name FROM hotels WHERE id = ? LIMIT 1', [hotelId]);
+        if (Array.isArray(hrows) && hrows.length) resolvedHotelName = hrows[0].name;
+      } catch (e) {
+        // ignore - we'll allow NULL hotel_name if lookup fails (hotel existence validated earlier)
+      }
+
+      const insertSql = 'INSERT INTO reviews (user_id, hotel_id, rating, comment, user_name, hotel_name) VALUES (?, ?, ?, ?, ?, ?)';
+      try {
+        const [result] = await db.query(insertSql, [userId, hotelId, rating, comment, reviewerName, resolvedHotelName]);
 
         // fetch and return the inserted row with user info
         const [rows] = await db.query(
           `SELECT r.id, r.user_id, r.hotel_id, r.rating, r.comment, r.review_date, r.created_at,
+                  r.user_name AS reviewer_name, r.hotel_name,
                   u.name AS user_name, u.email AS user_email
            FROM reviews r
            JOIN users u ON u.id = r.user_id
