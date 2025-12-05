@@ -125,10 +125,7 @@ export default function Dashboard() {
   // inline UI feedback for actions (e.g., a small 'Removed' bubble next to a button)
   const [actionFlash, setActionFlash] = useState({});
   const [cancellingIds, setCancellingIds] = useState([]);
-<<<<<<< HEAD
   const [deletingReviewIds, setDeletingReviewIds] = useState([]);
-=======
->>>>>>> 9ddd97b889cf0275183d11ebb1abdc7b15796a33
   const fileInputRef = useRef(null);
   const checkInRef = useRef(null);
   const checkOutRef = useRef(null);
@@ -153,15 +150,9 @@ export default function Dashboard() {
     const userObj = JSON.parse(storedUser);
     setUser(userObj);
 
-<<<<<<< HEAD
     // support per-user stored pictures (no global/shared key)
     const perUserKey = `user_profile_pic_${userObj.email}`;
     const savedPic = localStorage.getItem(perUserKey);
-=======
-    // support per-user stored pictures and fall back to the old global key
-    const perUserKey = `user_profile_pic_${userObj.email}`;
-    const savedPic = localStorage.getItem(perUserKey) || localStorage.getItem("user_profile_pic");
->>>>>>> 9ddd97b889cf0275183d11ebb1abdc7b15796a33
 
     if (savedPic) {
       setProfilePic(savedPic);
@@ -394,14 +385,10 @@ export default function Dashboard() {
         const base64 = reader.result;
         setProfilePic(base64);
         // persist per-user so multiple accounts are independent
-<<<<<<< HEAD
         try {
           const key = user?.email ? `user_profile_pic_${user.email}` : (user?.id ? `user_profile_pic_id_${user.id}` : `user_profile_pic_unknown`);
           localStorage.setItem(key, base64);
         } catch (e) {}
-=======
-        try { localStorage.setItem(`user_profile_pic_${user?.email || 'anonymous'}`, base64); } catch (e) {}
->>>>>>> 9ddd97b889cf0275183d11ebb1abdc7b15796a33
         // toast removed by request
       };
       reader.onerror = () => {
@@ -1020,11 +1007,7 @@ export default function Dashboard() {
               <Image src="/hotels.png" width={28} height={28} alt="Hotels" />
               <span>White Flower Stays</span>
             </h2>
-<<<<<<< HEAD
             <p className={styles.welcomeText}>Hello, {user.name.split(" ")[0]}!</p>
-=======
-            <p className={styles.welcomeText}>Hello, {user.name.split(" ")[0]}! 👋</p>
->>>>>>> 9ddd97b889cf0275183d11ebb1abdc7b15796a33
           </div>
           
           <nav className={styles.sidebarNav}>
@@ -1550,7 +1533,6 @@ export default function Dashboard() {
             </form>
           </div>
         )}
-<<<<<<< HEAD
 
         <div style={{ marginTop: 12 }}>
           <button
@@ -1572,8 +1554,6 @@ export default function Dashboard() {
             </div>
           </div>
         )}
-=======
->>>>>>> 9ddd97b889cf0275183d11ebb1abdc7b15796a33
       </div>
     </div>
   </div>
