@@ -133,7 +133,6 @@ export default async function handler(req, res) {
       }
     }
 
-<<<<<<< HEAD
     // 5. DELETE - remove user and related rows
     if (req.method === 'DELETE') {
       const { userId, email } = req.body || req.query || {};
@@ -172,10 +171,6 @@ export default async function handler(req, res) {
 
     // Method not allowed
     res.setHeader('Allow', ['GET', 'POST', 'PATCH', 'PUT', 'DELETE']);
-=======
-    // Method not allowed
-    res.setHeader('Allow', ['GET', 'POST', 'PATCH', 'PUT']);
->>>>>>> 9ddd97b889cf0275183d11ebb1abdc7b15796a33
     res.status(405).end(`Method ${req.method} Not Allowed`);
   } catch (err) {
     console.error(err);
